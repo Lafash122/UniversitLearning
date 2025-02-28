@@ -1,1 +1,1 @@
-This program implements an algorithm for finding shortest path points using Dijkstra's algorithm
+This program implements Dijkstra's shortest path search algorithm
