@@ -22,11 +22,11 @@ javac -d out -sourcepath . main/Main.java
 
 ### To run file-mode use
 ```cmd
-java -cp out Main in.txt
+java -cp out main.Main in.txt
 ```
 ### To run console-mode use
 ```cmd
-java -cp out Main
+java -cp out main.Main
 ```
 
 ## Information about the input files
