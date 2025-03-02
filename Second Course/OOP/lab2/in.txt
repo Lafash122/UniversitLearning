@@ -1,0 +1,16 @@
+DEFINE s 4
+PUSH s
+PUSH 7
+PUSH 11
+PUSH -6
+PUSH 9
+SQRT
++
+-
+/
+*
+PRINT
+POP
+# ok
+
+EXIT
