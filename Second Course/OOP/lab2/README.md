@@ -30,4 +30,5 @@ java -cp out Main
 ```
 
 ## Information about the input files
-- File `in.txt` includes **usage example**
+- File `example.txt` includes **usage example**
+- File `in.txt` includes **all commands**
