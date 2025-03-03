@@ -16,11 +16,11 @@ javac -d out -sourcepath . main/Main.java
 ```
 ### To run file-mode use
 ```cmd
-java -cp out main.Main in.txt
+java -cp out -Djava.util.logging.config.file=logging.properties main.Main <input.txt>
 ```
 ### To run console-mode use
 ```cmd
-java -cp out main.Main
+java -cp out -Djava.util.logging.config.file=logging.properties main.Main
 ```
 
 ## Information about the input files
