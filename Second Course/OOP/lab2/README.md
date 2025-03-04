@@ -26,3 +26,6 @@ java -cp out -Djava.util.logging.config.file=logging.properties main.Main
 ## Information about the input files
 - File `example.txt` includes **usage example**
 - File `in.txt` includes **all commands**
+
+- File `logging.properties` includes **logger configuration**
+- File `out/FabricConfig.cfg` includes **fabric configuration**
