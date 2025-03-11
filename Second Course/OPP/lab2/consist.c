@@ -77,13 +77,12 @@ void clear(Matrix *matrix) {
 	}
 }
 
-double *mult_matr_vect(Matrix *matrix, double *v, unsigned int size) {
-	double *res = (double *) calloc(size, sizeof(double));
-	for (unsigned int i = 0; i < size; ++i)
+void mult_matr_vect(Matrix *matrix, double *v, unsigned int size, double *res) {
+	for (unsigned int i = 0; i < size; ++i) {
+		res[i] = 0.0;
 		for (unsigned int j = 0; j < size; ++j)
 			res[i] += matrix->elements[i * size + j] * v[j];
-
-	return res;
+		}
 }
 
 void add(double *u, double *v, unsigned int size, double k) {
@@ -115,10 +114,12 @@ void process(Matrix *A, double *b, unsigned int size) {
 	double *r_new = (double *) malloc(size * sizeof(double));
 	double *z = (double *) malloc(size * sizeof(double));
 	double *tmp = (double *) malloc(size * sizeof(double));
-	double *Ax = mult_matr_vect(A, x, size);
+	double *Ax = (double *) calloc(size, sizeof(double));
+	double *Az = (double *) calloc(size, sizeof(double));
 
 	double alpha, betta;
 
+	mult_matr_vect(A, x, size, Ax);
 	copy(tmp, b, size);
 	sub(tmp, Ax, size, 1.0);
 	copy(r_old, tmp, size);
@@ -128,7 +129,7 @@ void process(Matrix *A, double *b, unsigned int size) {
 
 	unsigned int iter = 0;
 	while (!check_crit(r_old, b, size) && (iter < 50000)) {
-		double *Az = mult_matr_vect(A, z, size);
+		mult_matr_vect(A, z, size, Az);
 		alpha = skalar(r_old, r_old, size) / skalar(Az, z, size);
 
 		add(x, z, size, alpha);
@@ -142,8 +143,7 @@ void process(Matrix *A, double *b, unsigned int size) {
 		add(r_new, z, size, betta);
 		copy(z, r_new, size);
 
-		free(Az);
-		printf("Iterations counter: %d\n", iter);
+		//printf("Iterations counter: %d\n", iter);
 		iter++;
 	}
 
@@ -153,7 +153,7 @@ void process(Matrix *A, double *b, unsigned int size) {
 	//	printf("%6.3f ", x[i]);
 	//printf("\n");
 
-
+	free(Az);
 	free(r_old);
 	free(r_new);
 	free(z);
