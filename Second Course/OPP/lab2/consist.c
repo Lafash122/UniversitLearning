@@ -51,7 +51,7 @@ void fill(Matrix *matrix, unsigned int size) {
 		if (j >= k) {
 			double value = 2.0 * ((double) rand() / (double) RAND_MAX) - 1.0;
 			if (k == j)
-				value += (double) size;
+				value += (double) size / 64.0;
 
 			matrix->elements[k * size + j] = value;
 			matrix->elements[j * size + k] = value;		
@@ -61,7 +61,7 @@ void fill(Matrix *matrix, unsigned int size) {
 
 void fill_vect(double *u, unsigned int size) {
 	for (unsigned int i = 0; i < size; ++i)
-		u[i] = 2.0 * ((double) rand() / (double) RAND_MAX) - 1.0;
+		u[i] = 200.0 * ((double) rand() / (double) RAND_MAX) - 100.0;
 }
 
 Matrix *make(unsigned int size) {
