@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define eps 0.00001
 
@@ -54,7 +55,7 @@ void fill(Matrix *matrix, unsigned int size) {
 				value += (double) size / 64.0;
 
 			matrix->elements[k * size + j] = value;
-			matrix->elements[j * size + k] = value;		
+			matrix->elements[j * size + k] = value;
 		}
 	}
 }
@@ -136,22 +137,17 @@ void process(Matrix *A, double *b, unsigned int size) {
 
 		copy(r_new, r_old, size);
 		sub(r_new, Az, size, alpha);
-		
+
 		betta = skalar(r_new, r_new, size) / skalar(r_old, r_old, size);
 
 		copy(r_old, r_new, size);
 		add(r_new, z, size, betta);
 		copy(z, r_new, size);
 
-		//printf("Iterations counter: %d\n", iter);
 		iter++;
 	}
 
 	printf("Iterations counter: %d\n", iter);
-	//printf("Vector x:\n");
-	//for (unsigned int i = 0; i < size; ++i)
-	//	printf("%6.3f ", x[i]);
-	//printf("\n");
 
 	free(Az);
 	free(r_old);
@@ -160,22 +156,16 @@ void process(Matrix *A, double *b, unsigned int size) {
 	free(x);
 }
 
-void print_matr(Matrix *matrix, unsigned int size) {
-	printf("Matrix A:\n");
-	for (unsigned int i = 0; i < size; ++i) {
-		for (unsigned int j = 0; j < size; ++j)
-			printf("%6.3f ", matrix->elements[i * size + j]);
-		printf("\n");
-	}
-}
-
 int main(int argc, char **argv) {
 	if (argc < 2) {
-		puts("bad input: need 1 input argument");
+		puts("Bad input: need 1 input argument");
 		return 1;
 	}
 	unsigned int N;
 	N = atoi(argv[1]);
+
+	struct timespec start, end;
+	clock_gettime(CLOCK_MONOTONIC, &start);
 
 	double *b = (double *) calloc(N, sizeof(double));
 
@@ -184,14 +174,9 @@ int main(int argc, char **argv) {
 	Matrix *A = make(N);
 
 	process(A, b, N);
-	//print_matr(A, N);
 
-	//printf("Vector b:\n");
-	//for (unsigned int i = 0; i < N; ++i)
-	//	printf("%6.3f ", b[i]);
-	//printf("\n");
-
-	char bukva = getchar();
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	printf("Time counting: %f\n", end.tv_sec - start.tv_sec + 0.000000001 * (end.tv_nsec - start.tv_nsec));
 
 	free(b);
 	clear(A);
