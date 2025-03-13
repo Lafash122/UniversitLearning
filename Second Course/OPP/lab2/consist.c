@@ -96,14 +96,6 @@ void sub(double *u, double *v, unsigned int size, double k) {
 		u[i] -= k * v[i];
 }
 
-double *mult_vect_num(double *u, double k, unsigned int size) {
-	double *res = (double *) calloc(size, sizeof(double));
-	for (unsigned int i = 0; i < size; ++i)
-		res[i] = u[i] * k;
-
-	return res;
-}
-
 void copy(double *u, double *v, unsigned int size) {
 	for (unsigned int i = 0; i < size; ++i)
 		u[i] = v[i];
