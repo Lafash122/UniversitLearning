@@ -111,8 +111,6 @@ void process(double *A, double *b, unsigned int size) {
 		iter++;
 	}
 
-	printf("Iterations counter: %d\n", iter);
-
 	free(Az);
 	free(r_old);
 	free(r_new);
