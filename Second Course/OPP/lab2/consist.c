@@ -83,7 +83,7 @@ void mult_matr_vect(Matrix *matrix, double *v, unsigned int size, double *res) {
 		res[i] = 0.0;
 		for (unsigned int j = 0; j < size; ++j)
 			res[i] += matrix->elements[i * size + j] * v[j];
-		}
+	}
 }
 
 void add(double *u, double *v, unsigned int size, double k) {
