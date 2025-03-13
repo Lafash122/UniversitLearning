@@ -6,10 +6,6 @@
 
 #define eps 0.00001
 
-typedef struct {
-	double *elements;
-} Matrix;
-
 double norming(double *u, unsigned int size) {
 	double res = 0.0;
 	for (unsigned int i = 0; i < size; ++i)
@@ -33,18 +29,7 @@ double skalar(double *u, double *v, unsigned int size) {
 	return res;
 }
 
-Matrix *create(unsigned int size) {
-	Matrix *matrix = malloc(sizeof(Matrix));
-	matrix->elements = calloc(size * size, sizeof(double));
-	if (!matrix->elements) {
-		free(matrix);
-		return NULL;
-	}
-
-	return matrix;
-}
-
-void fill(Matrix *matrix, unsigned int size) {
+void fill(double *matrix, unsigned int size) {
 	for (unsigned int i = 0; i < size * size; ++i) {
 		unsigned int k = i / size;
 		unsigned int j = i % size;
@@ -54,8 +39,8 @@ void fill(Matrix *matrix, unsigned int size) {
 			if (k == j)
 				value += (double) size / 64.0;
 
-			matrix->elements[k * size + j] = value;
-			matrix->elements[j * size + k] = value;
+			matrix[k * size + j] = value;
+			matrix[j * size + k] = value;
 		}
 	}
 }
@@ -65,24 +50,11 @@ void fill_vect(double *u, unsigned int size) {
 		u[i] = 200.0 * ((double) rand() / (double) RAND_MAX) - 100.0;
 }
 
-Matrix *make(unsigned int size) {
-	Matrix *matrix = create(size);
-	fill(matrix, size);
-	return matrix;
-}
-
-void clear(Matrix *matrix) {
-	if (matrix) {
-		free(matrix->elements);
-		free(matrix);
-	}
-}
-
-void mult_matr_vect(Matrix *matrix, double *v, unsigned int size, double *res) {
+void mult_matr_vect(double *matrix, double *v, unsigned int size, double *res) {
 	for (unsigned int i = 0; i < size; ++i) {
 		res[i] = 0.0;
 		for (unsigned int j = 0; j < size; ++j)
-			res[i] += matrix->elements[i * size + j] * v[j];
+			res[i] += matrix[i * size + j] * v[j];
 	}
 }
 
@@ -101,7 +73,7 @@ void copy(double *u, double *v, unsigned int size) {
 		u[i] = v[i];
 }
 
-void process(Matrix *A, double *b, unsigned int size) {
+void process(double *A, double *b, unsigned int size) {
 	double *x = (double *) calloc(size, sizeof(double));
 	double *r_old = (double *) malloc(size * sizeof(double));
 	double *r_new = (double *) malloc(size * sizeof(double));
@@ -159,11 +131,11 @@ int main(int argc, char **argv) {
 	struct timespec start, end;
 	clock_gettime(CLOCK_MONOTONIC, &start);
 
-	double *b = (double *) calloc(N, sizeof(double));
+	double *b = (double *) malloc(N * sizeof(double));
+	double *A = (double *) malloc(N * N * sizeof(double));;
 
 	fill_vect(b, N);
-
-	Matrix *A = make(N);
+	fill(A, N);
 
 	process(A, b, N);
 
@@ -171,7 +143,7 @@ int main(int argc, char **argv) {
 	printf("Time counting: %f\n", end.tv_sec - start.tv_sec + 0.000000001 * (end.tv_nsec - start.tv_nsec));
 
 	free(b);
-	clear(A);
+	free(A);
 
 	return 0;
 }
