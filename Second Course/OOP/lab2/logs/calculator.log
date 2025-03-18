@@ -1,0 +1,6 @@
+2025-03-04 13:27:02 [INFO] main.Main - the programm has been started 
+2025-03-04 13:27:02 [INFO] tools.CalcHandler - working with Console 
+2025-03-04 13:27:05 [SEVERE] tools.CalcHandler - exceptions.UnknownCommand : Unknown command: 'Ex' 
+2025-03-04 13:27:09 [SEVERE] tools.CalcHandler - exceptions.UnknownCommand : Unknown command: 'Pusha' 
+2025-03-04 13:27:12 [INFO] commands.CommandExit - programm has been ended by CommandExit 
+2025-03-04 13:27:12 [FINE] java.lang.Runtime - Runtime.exit() called with status: 0 
