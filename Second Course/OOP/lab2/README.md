@@ -24,14 +24,15 @@ java -cp out -Djava.util.logging.config.file=logging.properties main.Main
 ```
 
 ## Compiling and running tests
-### To compile
+### To compile tests
 To compile the tests, the class files must already be compiled.
 ```cmd
 javac -cp "libs/*;out" -d out tests/commands/*.java
+javac -cp "libs/*;out" -d out tests/tools/*.java
 ```
-### To run
+### To run tests
 ```cmd
-java
+java -jar libs/junit-platform-console-standalone-1.12.1.jar -cp out --scan-class-path
 ```
 
 ## Information about the input files
