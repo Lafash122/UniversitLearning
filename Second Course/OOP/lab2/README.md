@@ -8,7 +8,7 @@
 - `CommandAdd.java`, `CommandComment.java`, `CommandPop.java` and etc; classes that implement specific commands
 - `DivisionByZero.java`, `InvalidParameter.java` and etc; classes for exception handling
 
-## Compiling and running
+## Compiling and running program
 ### To compile use next command
 ```cmd
 javac -d out commands/*.java
@@ -21,6 +21,17 @@ java -cp out -Djava.util.logging.config.file=logging.properties main.Main <input
 ### To run console-mode use
 ```cmd
 java -cp out -Djava.util.logging.config.file=logging.properties main.Main
+```
+
+## Compiling and running tests
+### To compile
+To compile the tests, the class files must already be compiled.
+```cmd
+javac -cp "libs/*;out" -d out tests/commands/*.java
+```
+### To run
+```cmd
+java
 ```
 
 ## Information about the input files
