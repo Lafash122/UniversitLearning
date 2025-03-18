@@ -34,6 +34,7 @@ javac -cp "libs/*;out" -d out tests/tools/*.java
 ```cmd
 java -jar libs/junit-platform-console-standalone-1.12.1.jar -cp out --scan-class-path
 ```
+You can also use the `run_tests.bat` script to run the tests.
 
 ## Information about the input files
 - File `example.txt` includes **usage example**
