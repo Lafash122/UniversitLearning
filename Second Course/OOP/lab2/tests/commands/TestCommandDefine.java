@@ -40,7 +40,7 @@ class TestCommandDefine {
 	}
 
 	@Test
-	void testArgumentsAndDefining() throws Exception {
+	void testArgumentsAndDefinition() throws Exception {
 		de.process(c, List.of("Koe-chto", "1"));
 		de.process(c, List.of("Cho-to", "9", "Escho"));
 

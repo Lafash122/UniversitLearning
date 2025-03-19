@@ -19,18 +19,8 @@ class TestCommandAdd {
 	}
 
 	@Test
-	void testArgumentsAndAddition() throws ContextException {
-		c.push(12.5f);
-		c.push(8.4f);
-
-		a.process(c, List.of("Koe-chto"));
-
-		assertEquals(20.9f, c.pop(), Math.ulp(20.9f));
-	}
-
-	@Test
 	void testNotEnoughContext() {
-		c.push(5);
+		c.push(52);
 
 		assertThrows(ContextException.class, () -> a.process(c, List.of()));
 	}
@@ -38,5 +28,15 @@ class TestCommandAdd {
 	@Test
 	void testEmptyContext() {
 		assertThrows(ContextException.class, () -> a.process(c, List.of()));
+	}
+
+	@Test
+	void testArgumentsAndAddition() throws Exception {
+		c.push(12.5f);
+		c.push(8.4f);
+
+		a.process(c, List.of("Koe-chto"));
+
+		assertEquals(20.9f, c.pop(), Math.ulp(20.9f));
 	}
 }
