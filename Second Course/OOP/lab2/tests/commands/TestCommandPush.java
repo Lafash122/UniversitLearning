@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import tools.Context;
 import exceptions.NotEnoughArguments;
 import exceptions.ContextException;
+import exceptions.CalculatorException;
 
 class TestCommandPush {
 	private Context c;
@@ -25,7 +26,7 @@ class TestCommandPush {
 	}
 
 	@Test
-	void testArgumentsAndPushingNumber() throws Exception {
+	void testArgumentsAndPushingNumber() throws CalculatorException {
 		pu.process(c, List.of("52"));
 
 		assertEquals(52, c.pop());
@@ -37,7 +38,7 @@ class TestCommandPush {
 	}
 
 	@Test
-	void testArgumentsAndPushingParameter() throws Exception {
+	void testArgumentsAndPushingParameter() throws CalculatorException {
 		CommandDefine de = new CommandDefine();
 
 		de.process(c, List.of("Koe-chto", "52"));

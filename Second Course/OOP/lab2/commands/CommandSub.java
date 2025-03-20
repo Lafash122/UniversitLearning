@@ -11,7 +11,7 @@ public class CommandSub extends Command {
 	private static final Logger logger = Logger.getLogger(CommandSub.class.getName());
 
 	@Override
-	public void process(Context context, List<String> args) throws Exception {
+	public void process(Context context, List<String> args) throws ContextException {
 		if (args.size() > 0)
 			logger.warning("unnecessary arguments, CommandSub does not require any arguments");
 

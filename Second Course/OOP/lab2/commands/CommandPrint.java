@@ -17,6 +17,6 @@ public class CommandPrint extends Command {
 
 		System.out.println(context.getNumberStack());
 
-		logger.info("CommandPrint was executed:" + context.getNumberStack());
+		logger.info("CommandPrint was executed: " + context.getNumberStack());
 	}
 }

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import tools.Context;
 import exceptions.ContextException;
 import exceptions.NegativeRoot;
+import exceptions.CalculatorException;
 
 class TestCommandSqrt {
 	private Context c;
@@ -32,7 +33,7 @@ class TestCommandSqrt {
 	}
 
 	@Test
-	void testArgumentsAndSqrt() throws Exception {
+	void testArgumentsAndSqrt() throws CalculatorException {
 		c.push(123454321);
 
 		sq.process(c, List.of("Koe-chto"));

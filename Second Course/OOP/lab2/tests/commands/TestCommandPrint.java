@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import tools.Context;
 import exceptions.ContextException;
+import exceptions.CalculatorException;
 
 class TestCommandPrint {
 	private Context c;
@@ -24,7 +25,7 @@ class TestCommandPrint {
 	}
 
 	@Test
-	void testArgumentsAndExecution() throws Exception {
+	void testArgumentsAndExecution() throws CalculatorException {
 		c.push(52);
 
 		assertDoesNotThrow(() -> pr.process(c, List.of()));

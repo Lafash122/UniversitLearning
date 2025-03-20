@@ -7,12 +7,13 @@ import java.util.logging.Level;
 import tools.Context;
 import exceptions.DivisionByZero;
 import exceptions.ContextException;
+import exceptions.CalculatorException;
 
 public class CommandDiv extends Command {
 	private static final Logger logger = Logger.getLogger(CommandDiv.class.getName());
 
 	@Override
-	public void process(Context context, List<String> args) throws Exception {
+	public void process(Context context, List<String> args) throws CalculatorException {
 		if (args.size() > 0)
 			logger.warning("unnecessary arguments, CommandDiv does not require any arguments");
 

@@ -1,6 +1,6 @@
 package exceptions;
 
-public class DivisionByZero extends Exception {
+public class DivisionByZero extends ArithmeticException {
 	public DivisionByZero(String message) {
 		super(message);
 	}

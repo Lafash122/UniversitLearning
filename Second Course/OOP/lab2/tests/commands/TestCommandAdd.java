@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import tools.Context;
 import exceptions.ContextException;
+import exceptions.CalculatorException;
 
 class TestCommandAdd {
 	private Context c;
@@ -31,7 +32,7 @@ class TestCommandAdd {
 	}
 
 	@Test
-	void testArgumentsAndAddition() throws Exception {
+	void testArgumentsAndAddition() throws CalculatorException {
 		c.push(12.5f);
 		c.push(8.4f);
 

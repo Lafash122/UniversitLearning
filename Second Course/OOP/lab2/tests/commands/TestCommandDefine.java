@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import tools.Context;
 import exceptions.NotEnoughArguments;
 import exceptions.InvalidParameter;
+import exceptions.CalculatorException;
 
 class TestCommandDefine {
 	private Context c;
@@ -40,7 +41,7 @@ class TestCommandDefine {
 	}
 
 	@Test
-	void testArgumentsAndDefinition() throws Exception {
+	void testArgumentsAndDefinition() throws CalculatorException {
 		de.process(c, List.of("Koe-chto", "1"));
 		de.process(c, List.of("Cho-to", "9", "Escho"));
 

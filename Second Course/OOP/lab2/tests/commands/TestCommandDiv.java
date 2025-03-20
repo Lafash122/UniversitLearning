@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import tools.Context;
 import exceptions.DivisionByZero;
 import exceptions.ContextException;
+import exceptions.CalculatorException;
 
 class TestCommandDiv {
 	private Context c;
@@ -40,7 +41,7 @@ class TestCommandDiv {
 	}
 
 	@Test
-	void testArgumentsAndDivision() throws Exception {
+	void testArgumentsAndDivision() throws CalculatorException {
 		c.push(1);
 		c.push(52);
 

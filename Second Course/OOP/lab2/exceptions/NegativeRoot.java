@@ -1,6 +1,6 @@
 package exceptions;
 
-public class NegativeRoot extends Exception {
+public class NegativeRoot extends ArithmeticException {
 	public NegativeRoot(String message) {
 		super(message);
 	}

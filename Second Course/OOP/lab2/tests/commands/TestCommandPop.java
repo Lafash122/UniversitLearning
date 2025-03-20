@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import tools.Context;
 import exceptions.ContextException;
+import exceptions.CalculatorException;
 
 class TestCommandPop {
 	private Context c;
@@ -24,7 +25,7 @@ class TestCommandPop {
 	}
 
 	@Test
-	void testArgumentsAndPop() throws Exception {
+	void testArgumentsAndPop() throws CalculatorException {
 		c.push(12.5f);
 
 		po.process(c, List.of("Koe-chto"));

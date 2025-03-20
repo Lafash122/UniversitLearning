@@ -1,6 +1,6 @@
 package exceptions;
 
-public class UnknownCommand extends Exception {
+public class UnknownCommand extends FactoryException {
 	public UnknownCommand(String message) {
 		super(message);
 	}

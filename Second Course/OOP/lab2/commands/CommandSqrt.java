@@ -8,12 +8,13 @@ import java.util.logging.Level;
 import tools.Context;
 import exceptions.ContextException;
 import exceptions.NegativeRoot;
+import exceptions.CalculatorException;
 
 public class CommandSqrt extends Command {
 	private static final Logger logger = Logger.getLogger(CommandSqrt.class.getName());
 
 	@Override
-	public void process(Context context, List<String> args) throws Exception {
+	public void process(Context context, List<String> args) throws CalculatorException {
 		if (args.size() > 0)
 			logger.warning("unnecessary arguments, CommandSqrt does not require any arguments");
 
