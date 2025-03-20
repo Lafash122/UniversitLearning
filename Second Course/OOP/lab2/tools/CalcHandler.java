@@ -44,7 +44,7 @@ public class CalcHandler {
 			List<String> arguments = Arrays.asList(parcedLine).subList(1, parcedLine.length);
 			com.process(context, arguments);
 		}
-		catch (CalculatorException e) {
+		catch (Exception e) {
 			logger.severe(e.getClass().getName() + " : " + e.getMessage());
 		}
 	}
