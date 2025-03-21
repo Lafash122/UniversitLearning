@@ -71,7 +71,7 @@ public class CalcHandler {
 		Context context = new Context();
 
 		String line = "";
-		while (!line.equals("EXIT")) {
+		while (scaner.hasNextLine()) {
 			line = scaner.nextLine();
 			lineHandle(line, context);
 		}
