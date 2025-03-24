@@ -40,11 +40,17 @@ public class CalcHandler {
 			return;
 
 		try {
-			Command com = CommandFactory.getCommand(parcedLine[0]);
+			CommandFactory f = new CommandFactory();
+			Command com = f.getCommand(parcedLine[0]);
 			List<String> arguments = Arrays.asList(parcedLine).subList(1, parcedLine.length);
 			com.process(context, arguments);
 		}
-		catch (Exception e) {
+		catch (ConfigFileNotFound i) {
+			logger.severe(i.getClass().getName() + " : " + i.getMessage());
+			logger.severe("It is impossible to continue the program execution");
+			System.exit(1);
+		}
+		catch (CalculatorException e) {
 			logger.severe(e.getClass().getName() + " : " + e.getMessage());
 		}
 	}
