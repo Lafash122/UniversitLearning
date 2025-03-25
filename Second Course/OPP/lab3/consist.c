@@ -69,11 +69,6 @@ void sub(double *u, double *v, unsigned int size, double k) {
 		u[i] -= k * v[i];
 }
 
-void copy(double *u, double *v, unsigned int size) {
-	for (unsigned int i = 0; i < size; ++i)
-		u[i] = v[i];
-}
-
 void process(double *A, double *b, unsigned int size) {
 	double *x = (double *) calloc(size, sizeof(double));
 	double *r_old = (double *) malloc(size * sizeof(double));
