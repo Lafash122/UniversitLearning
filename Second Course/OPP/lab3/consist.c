@@ -112,10 +112,6 @@ void process(double *A, double *b, unsigned int size) {
 		iter++;
 	}
 
-	puts("\nx:");
-	for (unsigned int i = 0; i < size; ++i)
-		printf("%6.3f ", x[i]);
-
 	free(Az);
 	free(r_old);
 	free(r_new);
@@ -137,22 +133,10 @@ int main(int argc, char **argv) {
 	fill_vect(b, N);
 	fill(A, N);
 
-	puts("b:");
-	for (unsigned int i = 0; i < N; ++i)
-		printf("%6.3f ", b[i]);
-	puts("\nMatrix A:");
-	for (unsigned int i = 0; i < N; ++i) {
-		for (unsigned int j = 0; j < N; ++j)
-			printf("%6.3f ", A[i * N + j]);
-		puts("");
-	}
-
 	process(A, b, N);
 
 	free(b);
 	free(A);
-
-	char bukva = getchar();
 
 	return 0;
 }
