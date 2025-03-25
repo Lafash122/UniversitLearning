@@ -72,7 +72,7 @@ void process(double *A, double *b, unsigned int size) {
 	double *Az = (double *) calloc(size, sizeof(double));
 
 	double alpha, betta;
-	double cheker = eps * norming(b, size) * eps * norming(b, size);
+	double cheker = eps * eps * skalar(b, b, size);
 
 	mult_matr_vect(A, x, size, Ax);
 	memcpy(tmp, b, size * sizeof(double));
