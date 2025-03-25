@@ -52,14 +52,15 @@ void mult_matr_vect(double *matrix, double *v, unsigned int size, double *res) {
 	}
 }
 
-void add(double *u, double *v, unsigned int size, double k) {
+
+void add(double *u, double *v, double *res, unsigned int size, double k) {
 	for (unsigned int i = 0; i < size; ++i)
-		u[i] += k * v[i];
+		res[i] = u[i] + k * v[i];
 }
 
-void sub(double *u, double *v, unsigned int size, double k) {
+void sub(double *u, double *v, double *res, unsigned int size, double k) {
 	for (unsigned int i = 0; i < size; ++i)
-		u[i] -= k * v[i];
+		res[i] = u[i] - k * v[i];
 }
 
 void process(double *A, double *b, unsigned int size) {
@@ -67,7 +68,6 @@ void process(double *A, double *b, unsigned int size) {
 	double *r_old = (double *) malloc(size * sizeof(double));
 	double *r_new = (double *) malloc(size * sizeof(double));
 	double *z = (double *) malloc(size * sizeof(double));
-	double *tmp = (double *) malloc(size * sizeof(double));
 	double *Ax = (double *) calloc(size, sizeof(double));
 	double *Az = (double *) calloc(size, sizeof(double));
 
@@ -75,11 +75,8 @@ void process(double *A, double *b, unsigned int size) {
 	double cheker = eps * eps * skalar(b, b, size);
 
 	mult_matr_vect(A, x, size, Ax);
-	memcpy(tmp, b, size * sizeof(double));
-	sub(tmp, Ax, size, 1.0);
-	memcpy(r_old, tmp, size * sizeof(double));
+	sub(b, Ax, r_old, size, 1.0);
 	memcpy(z, r_old, size * sizeof(double));
-	free(tmp);
 	free(Ax);
 
 	unsigned int iter = 0;
@@ -87,16 +84,14 @@ void process(double *A, double *b, unsigned int size) {
 		mult_matr_vect(A, z, size, Az);
 		alpha = skalar(r_old, r_old, size) / skalar(Az, z, size);
 
-		add(x, z, size, alpha);
+		add(x, z, x, size, alpha);
 
-		memcpy(r_new, r_old, size * sizeof(double));
-		sub(r_new, Az, size, alpha);
+		sub(r_old, Az, r_new, size, alpha);
 
 		betta = skalar(r_new, r_new, size) / skalar(r_old, r_old, size);
 
+		add(r_new, z, z, size, betta);
 		memcpy(r_old, r_new, size * sizeof(double));
-		add(r_new, z, size, betta);
-		memcpy(z, r_new, size * sizeof(double));
 
 		iter++;
 	}
