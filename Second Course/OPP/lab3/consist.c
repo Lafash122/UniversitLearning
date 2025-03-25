@@ -15,13 +15,6 @@ double norming(double *u, unsigned int size) {
 	return sqrt(res);
 }
 
-int check_crit(double *r_n, double *b, unsigned int size) {
-	double res = norming(r_n, size) / norming(b, size);
-	if (res < eps)
-		return 1;
-	return 0;
-}
-
 double skalar(double *u, double *v, unsigned int size) {
 	double res = 0.0;
 	for (unsigned int i = 0; i < size; ++i)
@@ -79,6 +72,7 @@ void process(double *A, double *b, unsigned int size) {
 	double *Az = (double *) calloc(size, sizeof(double));
 
 	double alpha, betta;
+	double cheker = eps * norming(b, size) * eps * norming(b, size);
 
 	mult_matr_vect(A, x, size, Ax);
 	memcpy(tmp, b, size * sizeof(double));
@@ -89,7 +83,7 @@ void process(double *A, double *b, unsigned int size) {
 	free(Ax);
 
 	unsigned int iter = 0;
-	while (!check_crit(r_old, b, size) && (iter < 50000)) {
+	while ((skalar(r_old, r_old, size) > cheker) && (iter < 50000)) {
 		mult_matr_vect(A, z, size, Az);
 		alpha = skalar(r_old, r_old, size) / skalar(Az, z, size);
 
@@ -119,6 +113,10 @@ int main(int argc, char **argv) {
 		puts("Bad input: need 1 input argument");
 		return 1;
 	}
+
+	struct timespec start, end;
+	clock_gettime(CLOCK_MONOTONIC, &start);
+
 	unsigned int N;
 	N = atoi(argv[1]);
 
@@ -129,6 +127,9 @@ int main(int argc, char **argv) {
 	fill(A, N);
 
 	process(A, b, N);
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	printf("Time counting: %f\n", end.tv_sec - start.tv_sec + 0.000000001 * (end.tv_nsec - start.tv_nsec));
 
 	free(b);
 	free(A);
