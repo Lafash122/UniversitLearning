@@ -8,7 +8,7 @@
 #define eps 0.00001
 
 double skalar(double *u, double *v, unsigned int size) {
-  double res = 0.0;
+	double res = 0.0;
 	#pragma omp parallel for reduction(+:res)
 	for (unsigned int i = 0; i < size; ++i)
 		res += u[i] * v[i];
