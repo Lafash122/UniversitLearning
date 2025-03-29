@@ -1,5 +1,6 @@
 # Second Lab - Stack Calculator
 The files in the `libs/` directory are not mine. They are needed here so that you can run the tests without searching for the necessary `*.jar` files.
+If you try to divide by zero or extract the root from a negative number, an error will occur and all the numbers involved in this operation will be lost.
 ## Files `*.java`
 - `Main.java` creates the object of Handler class to handle input;
 - `Handler.java` handles input data and that works with input file or console;
