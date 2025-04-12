@@ -1,1 +1,1 @@
-# Third lab - The game
+# Third Lab - A Game
