@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Model {
 	private int deckNum;
 	private List<Kard> deck;
+	private Deck deckk;
 	private Dealer d;
 	private Player p;
 
@@ -48,6 +49,7 @@ public class Model {
 	}
 
 	public void initGame(String playerName) {
+		deckk = new Deck(1);
 		genDeck();
 		p = new Player(playerName);
 		d = new Dealer();
