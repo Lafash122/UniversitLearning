@@ -11,13 +11,11 @@ public class Model {
 	private Dealer d;
 	private Player p;
 
-	private ConsoleView v;
-
 	public Model(int num) {
 		deckNum = num;
 	}
 
-	public void genDeck() {
+	private void genDeck() {
 		deck = new ArrayList<>();
 
 		for (int k = 0; k < deckNum; k++) {
@@ -49,6 +47,11 @@ public class Model {
 		Collections.shuffle(deck);
 	}
 
+	public void initGame(String playerName) {
+		genDeck();
+		p = new Player(playerName);
+		d = new Dealer();
+	}
 
 	public void round() {
 		Scanner sc = new Scanner(System.in);
@@ -176,17 +179,7 @@ public class Model {
 		System.out.println(p.getGameScore());
 	}
 
-	public void game(String playerName) {
-		genDeck();
-
-		p = new Player(playerName);
-		d = new Dealer();
-
+	public void game() {
 		round();
-	}
-
-	public void printDeck() {
-		for (Kard k : deck)
-			System.out.println(k);
 	}
 }
