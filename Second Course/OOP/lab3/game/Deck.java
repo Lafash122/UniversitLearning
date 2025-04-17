@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-	private int deckNum;
 	private List<Kard> deck;
 
-	public Deck(int size) {
-		deckNum = size;
-		genDeck();
+	public Deck(int deckNum) {
+		genDeck(deckNum);
 	}
 
-	private void genDeck() {
+	private void genDeck(int deckNum) {
 		deck = new ArrayList<>();
 
 		for (int k = 0; k < deckNum; k++) {

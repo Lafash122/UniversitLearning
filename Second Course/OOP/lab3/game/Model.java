@@ -8,9 +8,9 @@ import java.util.Scanner;
 public class Model {
 	private int deckNum;
 	private List<Kard> deck;
-	private Deck deckk;
 	private Dealer d;
 	private Player p;
+	
 
 	public Model(int num) {
 		deckNum = num;
@@ -49,10 +49,19 @@ public class Model {
 	}
 
 	public void initGame(String playerName) {
-		deckk = new Deck(1);
 		genDeck();
 		p = new Player(playerName);
 		d = new Dealer();
+	}
+
+	public void initRound() {
+		shuffleDeck();
+
+		p.takeKard(deck.remove(deck.size() - 1));
+		p.takeKard(deck.remove(deck.size() - 1));
+
+		d.takeKard(deck.remove(deck.size() - 1));
+		d.takeKard(deck.remove(deck.size() - 1));
 	}
 
 	public void round() {
@@ -70,6 +79,7 @@ public class Model {
 		d.takeKard(deck.remove(deck.size() - 1));
 		d.takeKard(deck.remove(deck.size() - 1));
 		d.showKard();
+		d.updateHandScore();
 		System.out.println(d.showPublicScore());
 
 		if ((p.getHandScore() == 21) && (d.showPublicScore() < 10)) {
@@ -179,9 +189,5 @@ public class Model {
 		p.takeBet(2.0f);
 		p.updateGameScore();
 		System.out.println(p.getGameScore());
-	}
-
-	public void game() {
-		round();
 	}
 }

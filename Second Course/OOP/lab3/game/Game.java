@@ -16,31 +16,37 @@ public class Game {
 		int launchComID = 0;
 		while (launchComID < 3) {
 			launchComID = controller.getLaunchCommand();
-			switch (launchComID) {
-				case 1:
-					viewer.about();
-					break;
-				case 2:
-					System.out.println("High Scores Table");
-					break;
-				case 3:
-					newGame("John");
-					break;
-				case 4:
-					System.exit(0);
-					break;
-				default:
-					System.out.println("Wrong command");
-					break;
-			}
+			if (launchComID == 1)
+				viewer.about();
+			else if (launchComID == 2)
+				System.out.println("High Scores Table");
+			else if (launchComID == 3)
+				newGame();
+			else if (launchComID == 4)
+				System.exit(0);
+			else
+				System.out.println("Wrong command");
 		}	
 	}
 
-	public void newGame(String name) {
-		model.initGame(name);
-		model.game();
+	public void newGame() {
+		viewer.getPlayerNameQuery();
+		model.initGame(controller.getPlayerName());
+		model.round();
+		int gameComID = 0;
+		while (gameComID < 3) {
+			gameComID = controller.getNextRoundCommand();
+			if (gameComID == 1)
+				model.round();
+			else if (gameComID == 2)
+				System.out.println("Saving Score Table");
+			else if (gameComID == 3)
+				System.exit(0);
+			else
+				System.out.println("Wrong command");
+		}
 	}
 
-	public void round() {
+	public void newRound() {
 	}
 }

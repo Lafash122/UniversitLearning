@@ -33,6 +33,10 @@ public class ConsoleView {
 		showInfoFile("resourses/about.txt");
 	}
 
+	public void getPlayerNameQuery() {
+		System.out.print("Enter your game name: ");
+	}
+
 	//public void showPlayerStatus(Player player) {
 	//	System.out.println("Player hand:");
 	//	for (Kard k : )

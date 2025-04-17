@@ -10,7 +10,6 @@ public class Dealer {
 	private List<Kard> hand;
 
 	public Dealer() {
-		handScore = 0;
 		kardNum = 0;
 		publicHandScore = 0;
 		hand = new ArrayList<>();
@@ -20,11 +19,11 @@ public class Dealer {
 		hand.add(k);
 		if (hand.size() == 1)
 			if (k.getValueId() == 1)
-				publicHandScore += 11;
+				publicHandScore = 11;
 			else if (k.getValueId() > 10)
-				publicHandScore += 10;
+				publicHandScore = 10;
 			else
-				publicHandScore += k.getValueId();
+				publicHandScore = k.getValueId();
 	}
 
 	public List<Kard> giveHand() {
