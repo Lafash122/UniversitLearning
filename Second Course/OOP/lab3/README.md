@@ -4,8 +4,8 @@
 - `Main.java` creates the object of Game class to play a game;
 - `ScoreTableHandler.java` handles score table from `scores` directory;
 - `Game.java` contains the main implementation of the game;
-- `CommandFactory.java` is a fabric-class that creates the successor classes of the Command, it takes the path to them from `out/FabricConfig.cfg`;
-- `Command.java` is an abstract class describing a command;
+- `Deck.java` a class that implements a deck of cards;
+- `Kard.java` a class that implements a playing card;
 - `Player.java`, `Dealer.java` and etc; classes that implement player and dealer behaviour;
 - `Model.java`, `ConsoleViewer.java`, `ConsoleController` and etc; classes implementing the MVC model;
 
