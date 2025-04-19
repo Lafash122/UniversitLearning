@@ -7,7 +7,6 @@ public class Player {
 	private String name;
 	private int gameScore;
 	private double cash;
-	private double memBet;
 
 	private int handScore;
 	private List<Kard> hand;
@@ -22,17 +21,16 @@ public class Player {
 
 	public void makeBet(double bet) {
 		if (bet >= cash) {
-			memBet = cash;
+			System.out.println("Your bet is more than you have. All your money will be wagered");
 			cash = 0;
+			return;
 		}
 
 		cash -= bet;
-		memBet = bet;
 	}
 
-	public void takeBet(double ratio) {
-		cash += memBet * ratio;
-		memBet = 0;
+	public void takeBet(double ratio, double bet) {
+		cash += bet * ratio;
 	}
 
 	public void updateHandScore() {
@@ -56,17 +54,15 @@ public class Player {
 	}
 
 	public void updateGameScore() {
-		gameScore += (cash - 1000);
+		gameScore = ((int) cash - 1000);
 	}
 
 	public void takeKard(Kard k) {
 		hand.add(k);
 	}
 
-	public void showHand() {
-		System.out.println("\nPlayer hand:");
-		for (Kard k : hand)
-			System.out.println(k);
+	public List<Kard> getHand() {
+		return hand;
 	}
 
 	public List<Kard> giveHand() {
@@ -85,5 +81,9 @@ public class Player {
 
 	public String getName() {
 		return name;
+	}
+
+	public double getCash() {
+		return cash;
 	}
 }

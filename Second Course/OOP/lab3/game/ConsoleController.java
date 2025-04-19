@@ -58,23 +58,20 @@ public class ConsoleController {
 		int res = 0;
 		String command = reader.nextLine();
 		switch (command.toLowerCase()) {
-			case "more":
+			case "yes":
 				res = 1;
 				break;
-			case "hit":
+			case "y":
 				res = 1;
 				break;
-			case "enough":
+			case "no":
 				res = 2;
 				break;
-			case "stand":
+			case "n":
 				res = 2;
-				break;
-			case "even":
-				res = 3;
 				break;
 			case "double":
-				res = 4;
+				res = 3;
 				break;
 			default:
 				res = -1;
@@ -86,7 +83,7 @@ public class ConsoleController {
 
 	public String getPlayerName() {
 		String line = reader.nextLine();
-		return line.replace(' ', '_');
+		return line.replaceAll("[;,.]", "_");
 	}
 
 	public double getBet() {
@@ -96,7 +93,7 @@ public class ConsoleController {
 			bet = Double.parseDouble(line);
 		}
 		catch (Exception e) {
-			System.out.println(e.getClass().getName() + " : " + e.getMessage());
+			System.out.println("Your bet cannot be interpreted. A bet of 0 will be placed.");
 			bet = 0;
 		}
 

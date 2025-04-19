@@ -1,0 +1,6 @@
+Hello, it's a simple computer blackjack
+Now you can enter one of the following commands:
+- New Game
+- About
+- High Scores
+- Exit

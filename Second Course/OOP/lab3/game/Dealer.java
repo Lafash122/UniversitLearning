@@ -5,12 +5,10 @@ import java.util.ArrayList;
 
 public class Dealer {
 	private int handScore;
-	private int kardNum;
 	private int publicHandScore;
 	private List<Kard> hand;
 
 	public Dealer() {
-		kardNum = 0;
 		publicHandScore = 0;
 		hand = new ArrayList<>();
 	}
@@ -52,22 +50,19 @@ public class Dealer {
 		}
 	}
 
-	public void showKard() {
-		System.out.println("\nDealer hand: ");
+	public Kard getPublicKard() {
 		if (!hand.isEmpty()) {
-			System.out.println(hand.get(0));
-			return;
+			return hand.get(0);
 		}
-		System.out.println("Unknown Kard");
+
+		return null;
 	}
 
-	public void showHand() {
-		System.out.println("\nDealer hand:");
-		for (Kard k : hand)
-			System.out.println(k);
+	public List<Kard> getHand() {
+		return hand;
 	}
 
-	public int showPublicScore() {
+	public int getPublicScore() {
 		return publicHandScore;
 	}
 
@@ -75,7 +70,7 @@ public class Dealer {
 		return handScore;
 	}
 
-	public int getHandNum() {
-		return kardNum;
+	public int getHandSize() {
+		return hand.size();
 	}
 }

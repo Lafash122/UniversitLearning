@@ -1,0 +1,19 @@
+Blackjack is a card game where the goal is to score more points than the dealer,
+but not more than 21. At the beginning of the game,
+the dealer deals two cards to the player and then to himself.
+The dealer sees all the player's cards when the player sees only the dealer's first card.
+After dealing the cards, the player is asked to take a card.
+If he refuses, the dealer takes the cards.
+Each card rank has its own equivalent in points:
+- Ace is 11 or 1
+- The number in the rank equals to the number of points (2 is 2, 6 is 6 etc)
+- Jack is 10
+- Queen is 10
+- King is 10
+
+If a player has a blackjack (2 cards with a total of 21 points),
+he can take a 1:1 win or wait for the dealer to reveal his cards.
+If the dealer also has a blackjack, the player's bet is refunded.
+But f the dealer has not a blackjack, the player take a 3:2 win.
+If the player has more points than the dealer and no more than 21 (not blackjack),
+he take a 1:1 win. In other situations, the player loses and his bet is lost.

@@ -66,6 +66,6 @@ public class Kard {
 
 	@Override
 	public String toString() {
-		return "Kard: " + getValueName() + " " + suit;
+		return getValueName() + " " + suit;
 	}
 }

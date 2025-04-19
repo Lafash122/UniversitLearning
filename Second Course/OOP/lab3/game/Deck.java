@@ -43,11 +43,16 @@ public class Deck {
 		Collections.shuffle(deck);
 	}
 
-	public Kard removeKardDeck() {
+	public Kard removeKard() {
 		return deck.remove(deck.size() - 1);
 	}
 
 	public void mergeKardDeck(List<Kard> hand) {
 		deck.addAll(hand);
+	}
+
+	public void printDeck() {
+		for (Kard k : deck)
+			System.out.println(k);
 	}
 }

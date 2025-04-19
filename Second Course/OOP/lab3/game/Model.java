@@ -1,193 +1,95 @@
 package game;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
 
 public class Model {
-	private int deckNum;
-	private List<Kard> deck;
+	private Deck deck;
 	private Dealer d;
 	private Player p;
-	
-
-	public Model(int num) {
-		deckNum = num;
-	}
-
-	private void genDeck() {
-		deck = new ArrayList<>();
-
-		for (int k = 0; k < deckNum; k++) {
-			for (int i = 0; i < 4; i++) {
-				for (int j = 1; j <= 13; j++) {
-					String suit = "Suit";
-					switch (i) {
-						case 0:
-							suit = "Diamonds";
-							break;
-						case 1:
-							suit = "Clubs";
-							break;
-						case 2:
-							suit = "Hearts";
-							break;
-						case 3:
-							suit = "Spades";
-							break;
-					}
-
-					deck.add(new Kard(suit, j));
-				}
-			}
-		}
-	}
-
-	public void shuffleDeck() {
-		Collections.shuffle(deck);
-	}
+	private double playerBet;
 
 	public void initGame(String playerName) {
-		genDeck();
+		deck = new Deck(1);
 		p = new Player(playerName);
 		d = new Dealer();
 	}
 
-	public void initRound() {
-		shuffleDeck();
+	public void initRound(double bet) {
+		deck.shuffleDeck();
 
-		p.takeKard(deck.remove(deck.size() - 1));
-		p.takeKard(deck.remove(deck.size() - 1));
+		playerBet = bet;
+		p.makeBet(bet);
 
-		d.takeKard(deck.remove(deck.size() - 1));
-		d.takeKard(deck.remove(deck.size() - 1));
+		p.takeKard(deck.removeKard());
+		p.takeKard(deck.removeKard());
+		p.updateHandScore();
+
+		d.takeKard(deck.removeKard());
+		d.takeKard(deck.removeKard());
+		d.updateHandScore();
 	}
 
-	public void round() {
-		Scanner sc = new Scanner(System.in);
-
-		shuffleDeck();
-
-		p.makeBet(100);
-		p.takeKard(deck.remove(deck.size() - 1));
-		p.takeKard(deck.remove(deck.size() - 1));
-		p.showHand();
-		p.updateHandScore();
-		System.out.println(p.getHandScore());
-
-		d.takeKard(deck.remove(deck.size() - 1));
-		d.takeKard(deck.remove(deck.size() - 1));
-		d.showKard();
-		d.updateHandScore();
-		System.out.println(d.showPublicScore());
-
-		if ((p.getHandScore() == 21) && (d.showPublicScore() < 10)) {
-			List<Kard> pHand = p.giveHand();
-			List<Kard> dHand = d.giveHand();
-			deck.addAll(pHand);
-			deck.addAll(dHand);
-
-			p.takeBet(2.5f);
-			p.updateGameScore();
-			System.out.println(p.getGameScore());
-			return;
-		}
-
-		else if ((p.getHandScore() == 21) && (d.showPublicScore() >= 10)) {
-			int flag = sc.nextInt();
-			if (flag > 0) {
-				List<Kard> pHand = p.giveHand();
-				List<Kard> dHand = d.giveHand();
-				deck.addAll(pHand);
-				deck.addAll(dHand);
-
-				p.takeBet(2.0f);
-				p.updateGameScore();
-				System.out.println(p.getGameScore());
-				return;
-			}
-
-			d.updateHandScore();
-			while(d.getHandScore() < 17) {
-				d.takeKard(deck.remove(deck.size() - 1));
-				d.updateHandScore();
-			}
-
-			d.showHand();
-			System.out.println(d.getHandScore());
-
-			if (d.getHandScore() != 21) {
-				List<Kard> pHand = p.giveHand();
-				List<Kard> dHand = d.giveHand();
-				deck.addAll(pHand);
-				deck.addAll(dHand);
-
-				p.takeBet(2.5f);
-				p.updateGameScore();
-				System.out.println(p.getGameScore());
-				return;
-			}
-
-			List<Kard> pHand = p.giveHand();
-			List<Kard> dHand = d.giveHand();
-			deck.addAll(pHand);
-			deck.addAll(dHand);
-
-			p.takeBet(1.0f);
-			p.updateGameScore();
-			System.out.println(p.getGameScore());
-			return;
-		}
-
-		int flag = sc.nextInt();
-		while((flag > 0) && (p.getHandScore() < 21)) {
-			p.takeKard(deck.remove(deck.size() - 1));
-			p.showHand();
-			p.updateHandScore();
-			System.out.println(p.getHandScore());
-			flag = sc.nextInt();
-		}
-
-		if (p.getHandScore() > 21) {
-			List<Kard> pHand = p.giveHand();
-			List<Kard> dHand = d.giveHand();
-			deck.addAll(pHand);
-			deck.addAll(dHand);
-
-			p.takeBet(0.0f);
-			p.updateGameScore();
-			System.out.println(p.getGameScore());
-			return;
-		}
-
-		d.updateHandScore();
-		while(d.getHandScore() < 17) {
-			d.takeKard(deck.remove(deck.size() - 1));
-			d.updateHandScore();
-		}
-		d.showHand();
-		System.out.println(d.getHandScore());
-
-		List<Kard> pHand = p.giveHand();
-		List<Kard> dHand = d.giveHand();
-		deck.addAll(pHand);
-		deck.addAll(dHand);
-
-		if (((d.getHandScore() == 21) && (d.getHandNum() == 2)) || ((d.getHandScore() > p.getHandScore()) && (d.getHandScore() <= 21))) {
-			p.takeBet(0.0f);
-			p.updateGameScore();
-			System.out.println(p.getGameScore());
-			return;
-		}
-		else if (d.getHandScore() == p.getHandScore()) {
-			p.takeBet(1.0f);
-			p.updateGameScore();
-			System.out.println(p.getGameScore());
-			return;
-		}
-		p.takeBet(2.0f);
+	public void endRound(double ratio) {
+		deck.mergeKardDeck(p.giveHand());
+		deck.mergeKardDeck(d.giveHand());
+		p.takeBet(ratio, playerBet);
 		p.updateGameScore();
-		System.out.println(p.getGameScore());
+		playerBet = 0;
+	}
+
+	public void playerTakeKard() {
+		p.takeKard(deck.removeKard());
+		p.updateHandScore();
+	}
+
+	public void dealerTakeKard() {
+		d.takeKard(deck.removeKard());
+		d.updateHandScore();
+	}
+
+
+	public int getPlayerHandScore() {
+		return p.getHandScore();
+	}
+
+	public int getPlayerGameScore() {
+		return p.getGameScore();
+	}
+
+	public List<Kard> getPlayerHand() {
+		return p.getHand();
+	}
+
+	public double getPlayerCash() {
+		return p.getCash();
+	}
+
+	public double getPlayerBet() {
+		return playerBet;
+	}
+
+	public String getPlayerName() {
+		return p.getName();
+	}
+
+
+	public int getDealerHandSize() {
+		return d.getHandSize();
+	}
+
+	public int getDealerPublicScore() {
+		return d.getPublicScore();
+	}
+
+	public Kard getDealerPublicKard() {
+		return d.getPublicKard();
+	}
+
+	public int getDealerHandScore() {
+		return d.getHandScore();
+	}
+
+	public List<Kard> getDealerHand() {
+		return d.getHand();
 	}
 }
