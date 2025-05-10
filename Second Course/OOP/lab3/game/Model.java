@@ -64,10 +64,6 @@ public class Model {
 		return p.getCash();
 	}
 
-	public double getPlayerBet() {
-		return playerBet;
-	}
-
 	public String getPlayerName() {
 		return p.getName();
 	}

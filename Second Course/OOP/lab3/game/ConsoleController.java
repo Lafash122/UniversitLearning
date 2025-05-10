@@ -9,19 +9,23 @@ public class ConsoleController {
 		reader = new Scanner(System.in);
 	}
 
-	public int getLaunchCommand() {
+	public int getLaunchCommand(ConsoleView viewer) {
 		int res = 0;
 		String command = reader.nextLine();
 		switch (command.toLowerCase()) {
+			case "a":
 			case "about":
 				res = 1;
 				break;
+			case "h":
 			case "high scores":
 				res = 2;
 				break;
+			case "n":
 			case "new game":
 				res = 3;
 				break;
+			case "e":
 			case "exit":
 				res = 4;
 				break;
@@ -33,16 +37,23 @@ public class ConsoleController {
 		return res;
 	}
 
-	public int getNextRoundCommand() {
+	public int getNextRoundCommand(int type) {
 		int res = 0;
 		String command = reader.nextLine();
 		switch (command.toLowerCase()) {
+			case "y":
+			case "yes":
+			case "nx":
 			case "next":
 				res = 1;
 				break;
+			case "s":
 			case "save":
 				res = 2;
 				break;
+			case "n":
+			case "no":
+			case "e":
 			case "exit":
 				res = 3;
 				break;
@@ -54,19 +65,15 @@ public class ConsoleController {
 		return res;
 	}
 
-	public int getRoundCommand() {
+	public int getRoundCommand(int type) {
 		int res = 0;
 		String command = reader.nextLine();
 		switch (command.toLowerCase()) {
 			case "yes":
-				res = 1;
-				break;
 			case "y":
 				res = 1;
 				break;
 			case "no":
-				res = 2;
-				break;
 			case "n":
 				res = 2;
 				break;
@@ -81,19 +88,21 @@ public class ConsoleController {
 		return res;
 	}
 
-	public String getPlayerName() {
+	public String getPlayerName(ConsoleView viewer, int type) {
 		String line = reader.nextLine();
+		if (line.isEmpty())
+			return "UnknownPlayer";
+
 		return line.replaceAll("[;,.]", "_");
 	}
 
-	public double getBet() {
+	public double getBet(ConsoleView viewer, int type) {
 		String line = reader.nextLine();
 		double bet;
 		try {
 			bet = Double.parseDouble(line);
 		}
 		catch (Exception e) {
-			System.out.println("Your bet cannot be interpreted. A bet of 0 will be placed.");
 			bet = 0;
 		}
 

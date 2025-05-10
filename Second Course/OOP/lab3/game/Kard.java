@@ -64,6 +64,10 @@ public class Kard {
 		return nameValue;
 	}
 
+	public String getDesc() {
+		return getValueName() + suit;
+	}
+
 	@Override
 	public String toString() {
 		return getValueName() + " " + suit;

@@ -35,24 +35,29 @@ public class ConsoleView {
 		showInfoFile("resourses/about.txt");
 	}
 
-	public void getPlayerNameQuery() {
+	public int getPlayerNameQuery() {
 		System.out.print("Enter your game name: ");
+		return 0;
 	}
 
-	public void getPlayerBetQuery(double cash) {
+	public int getPlayerBetQuery(double cash) {
 		System.out.print("Enter the amount you want to bet (Now you have " + cash + "): ");
+		return 0;
 	}
 
-	public void getInsuranceQuery() {
+	public int getInsuranceQuery() {
 		System.out.print("\nDo you want to make Insurance? [yes/no]: ");
+		return 0;
 	}
 
-	public void getTakeKardQuery() {
+	public int getTakeKardQuery() {
 		System.out.print("\nDo you want to make one more Card? [yes/no]: ");
+		return 0;
 	}
 
-	public void getNextRoundQuery() {
+	public int getNextRoundQuery() {
 		System.out.print("\nDo you want to continue game? Write \'next\' if yes, \'exit\' if no: ");
+		return 0;
 	}
 
 	public void messageWrongCom() {
@@ -61,7 +66,7 @@ public class ConsoleView {
 
 	public void messageSaveScore(boolean flag) {
 		if (flag)
-			System.out.println("Score Table was saved");
+			System.out.println("Your score was saved");
 	}
 
 	public void showScores(Map<String, Integer> scores, boolean flag) {

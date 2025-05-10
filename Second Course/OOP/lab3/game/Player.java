@@ -21,7 +21,6 @@ public class Player {
 
 	public void makeBet(double bet) {
 		if (bet >= cash) {
-			System.out.println("Your bet is more than you have. All your money will be wagered");
 			cash = 0;
 			return;
 		}

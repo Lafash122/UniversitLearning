@@ -2,14 +2,15 @@ package game;
 
 public class Game {
 	private Model model;
-	private ConsoleView viewer;
-	private ConsoleController controller;
+	private GraphicView viewer;
+	private GraphicController controller;
 	private ScoreTableHandler scores;
+	private boolean isScoresLoad = false;
 
 	public Game() {
 		model = new Model();
-		viewer = new ConsoleView();
-		controller = new ConsoleController();
+		viewer = new GraphicView();
+		controller = new GraphicController();
 		scores = new ScoreTableHandler();
 	}
 
@@ -17,7 +18,7 @@ public class Game {
 		viewer.greeting();
 		int launchComID = 0;
 		while (launchComID < 3) {
-			launchComID = controller.getLaunchCommand();
+			launchComID = controller.getLaunchCommand(viewer);
 			if (launchComID == 1)
 				viewer.about();
 			else if (launchComID == 2) {
@@ -34,16 +35,18 @@ public class Game {
 	}
 
 	public void newGame() {
-		viewer.getPlayerNameQuery();
-		model.initGame(controller.getPlayerName());
+		int flag = viewer.getPlayerNameQuery();
+		model.initGame(controller.getPlayerName(viewer, flag));
 		newRound();
 		int gameComID = 0;
 		while (gameComID < 3) {
-			viewer.getNextRoundQuery();
-			gameComID = controller.getNextRoundCommand();
+			int flag1 = viewer.getNextRoundQuery();
+			gameComID = controller.getNextRoundCommand(flag1);
 			if (gameComID == 1)
 				newRound();
 			else if (gameComID == 2) {
+				if (!isScoresLoad)
+					isScoresLoad = scores.readScores();
 				boolean success = scores.writeScores(model.getPlayerName(), model.getPlayerGameScore());
 				viewer.messageSaveScore(success);
 			}
@@ -55,8 +58,8 @@ public class Game {
 	}
 
 	public void newRound() {
-		viewer.getPlayerBetQuery(model.getPlayerCash());
-		double bet = controller.getBet();
+		int flag0 = viewer.getPlayerBetQuery(model.getPlayerCash());
+		double bet = controller.getBet(viewer, flag0);
 		model.initRound(bet);
 		viewer.showPlayerRoundInfo(model.getPlayerHand(), model.getPlayerHandScore());
 		viewer.showDealerRoundInfo(model.getDealerPublicKard(), model.getDealerHandSize(), model.getDealerPublicScore());
@@ -67,8 +70,8 @@ public class Game {
 			return;
 		}
 		else if ((model.getPlayerHandScore() == 21) && (model.getDealerPublicScore() >= 10)) {
-			viewer.getInsuranceQuery();
-			int roundComID = controller.getRoundCommand();
+			int flag1 = viewer.getInsuranceQuery();
+			int roundComID = controller.getRoundCommand(flag1);
 			viewer.showDealerHand(model.getDealerHand(), model.getDealerHandScore());
 
 			if (roundComID == 1) {
@@ -88,12 +91,12 @@ public class Game {
 			return;
 		}
 
-		viewer.getTakeKardQuery();
-		while ((model.getPlayerHandScore() < 21) && (controller.getRoundCommand() != 2)) {
+		int flag2 = viewer.getTakeKardQuery();
+		while ((model.getPlayerHandScore() < 21) && (controller.getRoundCommand(flag2) != 2)) {
 			model.playerTakeKard();
 			viewer.showPlayerRoundInfo(model.getPlayerHand(), model.getPlayerHandScore());
 			if (model.getPlayerHandScore() < 21)
-				viewer.getTakeKardQuery();
+				flag2 = viewer.getTakeKardQuery();
 		}
 
 		if (model.getPlayerHandScore() > 21) {

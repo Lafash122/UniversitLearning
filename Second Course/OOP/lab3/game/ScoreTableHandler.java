@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ScoreTableHandler {
@@ -15,14 +15,15 @@ public class ScoreTableHandler {
 
 	public ScoreTableHandler() {
 		file = new File("scores/score_table.csv");
-		scores = new TreeMap<>();
+		scores = new LinkedHashMap<>();
 	}
 
 	public boolean readScores() {
 		if (!file.exists()) {
-			System.out.println("The file \'scores/score_table.csv\' not found");
+			System.out.println("Error: Scores Table Could Not Be Found");
 			return false;
 		}
+
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -46,7 +47,6 @@ public class ScoreTableHandler {
 				file.createNewFile();
 			}
 			catch (IOException e) {
-				System.out.println("Error: " + e.getMessage());
 				return false;
 			}
 		}
@@ -63,13 +63,11 @@ public class ScoreTableHandler {
 					writer.newLine();
 				}
 				catch(IOException e) {
-					System.out.println("Error: " + e.getMessage());
 					throw new RuntimeException(e);
 				}
 			});
 		}
 		catch (IOException | RuntimeException e) {
-			System.out.println("Error: " + e.getMessage());
 			return false;
 		}
 

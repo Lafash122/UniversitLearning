@@ -50,9 +50,4 @@ public class Deck {
 	public void mergeKardDeck(List<Kard> hand) {
 		deck.addAll(hand);
 	}
-
-	public void printDeck() {
-		for (Kard k : deck)
-			System.out.println(k);
-	}
 }
