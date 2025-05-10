@@ -8,8 +8,10 @@
 - `Kard.java` a class that implements a playing card;
 - `Player.java` and `Dealer.java`; classes that implement player and dealer behaviour;
 - `Model.java`, `ConsoleViewer.java`, `ConsoleController`, `GraphicView` and `GraphicController`; classes implementing the MVC model;
-- `GraphicView` and `GraphicController`; classes implementing the grapic mode of game;
-- `ConsoleViewer.java` and `ConsoleController`; classes implementing the console mode of game;
+- `GraphicView.java` and `GraphicController.java`; classes implementing the grapic mode of game;
+- `ConsoleView.java` and `ConsoleController.java`; classes implementing the console mode of game;
+
+To change the display mode, in the `Main.java` change the Controller and View to the desired ones.
 
 ## Compiling and running program
 ### To compile use next command
