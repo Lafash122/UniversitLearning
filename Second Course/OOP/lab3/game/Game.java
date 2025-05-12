@@ -16,18 +16,18 @@ public class Game {
 
 	public void launch() {
 		viewer.greeting();
-		int launchComID = 0;
-		while (launchComID < 3) {
+		ComID launchComID = ComID.DEFAULT;
+		while (launchComID != ComID.GAME) {
 			launchComID = controller.getLaunchCommand(viewer);
-			if (launchComID == 1)
+			if (launchComID == ComID.ABOUT)
 				viewer.about();
-			else if (launchComID == 2) {
+			else if (launchComID == ComID.SCORES) {
 				boolean success = scores.readScores();
 				viewer.showScores(scores.getScores(), success);
 			}
-			else if (launchComID == 3)
+			else if (launchComID == ComID.GAME)
 				newGame();
-			else if (launchComID == 4)
+			else if (launchComID == ComID.EXIT)
 				System.exit(0);
 			else
 				viewer.messageWrongCom();
@@ -35,22 +35,22 @@ public class Game {
 	}
 
 	public void newGame() {
-		int flag = viewer.getPlayerNameQuery();
-		model.initGame(controller.getPlayerName(viewer, flag));
+		int decision_name = viewer.getPlayerNameQuery();
+		model.initGame(controller.getPlayerName(viewer, decision_name));
 		newRound();
-		int gameComID = 0;
-		while (gameComID < 3) {
-			int flag1 = viewer.getNextRoundQuery();
-			gameComID = controller.getNextRoundCommand(flag1);
-			if (gameComID == 1)
+		ComID gameComID = ComID.DEFAULT;
+		while (gameComID != ComID.EXIT) {
+			int decision_round = viewer.getNextRoundQuery();
+			gameComID = controller.getNextRoundCommand(decision_round);
+			if (gameComID == ComID.NEXT)
 				newRound();
-			else if (gameComID == 2) {
+			else if (gameComID == ComID.SCORES) {
 				if (!isScoresLoad)
 					isScoresLoad = scores.readScores();
 				boolean success = scores.writeScores(model.getPlayerName(), model.getPlayerGameScore());
 				viewer.messageSaveScore(success);
 			}
-			else if (gameComID == 3)
+			else if (gameComID == ComID.EXIT)
 				System.exit(0);
 			else
 				viewer.messageWrongCom();
@@ -58,8 +58,8 @@ public class Game {
 	}
 
 	public void newRound() {
-		int flag0 = viewer.getPlayerBetQuery(model.getPlayerCash());
-		double bet = controller.getBet(viewer, flag0);
+		int decision_bet = viewer.getPlayerBetQuery(model.getPlayerCash());
+		double bet = controller.getBet(viewer, decision_bet);
 		model.initRound(bet);
 		viewer.showPlayerRoundInfo(model.getPlayerHand(), model.getPlayerHandScore());
 		viewer.showDealerRoundInfo(model.getDealerPublicKard(), model.getDealerHandSize(), model.getDealerPublicScore());
@@ -70,11 +70,11 @@ public class Game {
 			return;
 		}
 		else if ((model.getPlayerHandScore() == 21) && (model.getDealerPublicScore() >= 10)) {
-			int flag1 = viewer.getInsuranceQuery();
-			int roundComID = controller.getRoundCommand(flag1);
+			int decision_insurance = viewer.getInsuranceQuery();
+			ComID roundComID = controller.getRoundCommand(decision_insurance);
 			viewer.showDealerHand(model.getDealerHand(), model.getDealerHandScore());
 
-			if (roundComID == 1) {
+			if (roundComID == ComID.YES) {
 				model.endRound(2.0f);
 				viewer.win(1.0f, bet, model.getPlayerGameScore());
 				return;
@@ -91,12 +91,12 @@ public class Game {
 			return;
 		}
 
-		int flag2 = viewer.getTakeKardQuery();
-		while ((model.getPlayerHandScore() < 21) && (controller.getRoundCommand(flag2) != 2)) {
+		int decision_card = viewer.getTakeKardQuery();
+		while ((model.getPlayerHandScore() < 21) && (controller.getRoundCommand(decision_card) != ComID.NO)) {
 			model.playerTakeKard();
 			viewer.showPlayerRoundInfo(model.getPlayerHand(), model.getPlayerHandScore());
 			if (model.getPlayerHandScore() < 21)
-				flag2 = viewer.getTakeKardQuery();
+				decision_card = viewer.getTakeKardQuery();
 		}
 
 		if (model.getPlayerHandScore() > 21) {
