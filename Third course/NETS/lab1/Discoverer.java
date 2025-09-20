@@ -38,7 +38,6 @@ public class Discoverer {
 				System.out.println("Couldn't find the network interface");
 				return;
 			}
-			System.out.println("This interface was found: " + multicastInterface.getDisplayName());
 		}
 		catch (Exception e) {
 			System.out.println("Network error: " + e.getMessage());
@@ -86,11 +85,11 @@ public class Discoverer {
 				for (InterfaceAddress addresses : res.getInterfaceAddresses()) {
 					InetAddress addr = addresses.getAddress();
 					if (isIPv4 && (addr instanceof Inet4Address)) {
-						System.out.println(addr.getHostAddress());
+						System.out.println("This interface was found: " + addr.getHostAddress() + " " + res.getDisplayName());
 						return res;
 					}
 					else if ((!isIPv4) && (addr instanceof Inet6Address)){
-						System.out.println(addr.getHostAddress());
+						System.out.println("This interface was found: " + addr.getHostAddress() + " " + res.getDisplayName());
 						return res;
 					}
 				}
@@ -100,7 +99,6 @@ public class Discoverer {
 	}
 
 	private void startExecution() {
-		System.out.println("ok");
 		new Thread(() -> {
 			while (!(socket.isClosed())) {
 				try {
