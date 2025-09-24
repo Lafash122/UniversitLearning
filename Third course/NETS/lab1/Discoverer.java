@@ -191,6 +191,3 @@ public class Discoverer {
 		return isChanged;
 	}
 }
-
-
-
