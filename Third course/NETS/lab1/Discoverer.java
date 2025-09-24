@@ -56,6 +56,8 @@ public class Discoverer {
 			return;
 		}
 
+		System.out.println("My UUID is " + copyId + "\n");
+
 		startExecution();
 	}
 
@@ -189,3 +191,4 @@ public class Discoverer {
 		return isChanged;
 	}
 }
+
