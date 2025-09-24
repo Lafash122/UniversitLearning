@@ -180,10 +180,11 @@ public class Discoverer {
 	private boolean checkAlives() {
 		int curTime = (int) System.currentTimeMillis();
 		boolean isChanged = false;
-		for (String id : lastSeen.keySet()) {
-			int lastTime = lastSeen.get(id);
-			if ((curTime - lastTime) > timeout) {
-				lastSeen.remove(id);
+		Iterator<Map.Entry<String, Integer>> it = lastSeen.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Integer> entry = it.next();
+			if ((curTime - entry.getValue()) > timeout) {
+				it.remove();
 				isChanged = true;
 			}
 		}
@@ -191,4 +192,5 @@ public class Discoverer {
 		return isChanged;
 	}
 }
+
 
