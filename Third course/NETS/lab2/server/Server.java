@@ -46,7 +46,7 @@ public class Server {
 
 		serverSocket = new ServerSocket(serverPort);
 		System.out.println("Sever listening on the port: " + serverSocket.getLocalPort());
-		scheduler.scheduleAtFixedRate(() -> showClientsInfo(), 1, 3, TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(() -> showClientsInfo(), 0, 3, TimeUnit.SECONDS);
 	}
 
 	private void showClientsInfo() {
@@ -144,3 +144,4 @@ public class Server {
 		return new FileOutputStream(file);
 	}
 }
+
