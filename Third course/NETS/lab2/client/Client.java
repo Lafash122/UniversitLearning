@@ -22,6 +22,7 @@ public class Client {
 	private String filePath;
 	private String fileName;
 	private int fileNameLength;
+	private long fileSize = 0;
 	private String serverAddress;
 	private int serverPort;
 	private Socket connectionSocket;
@@ -35,7 +36,6 @@ public class Client {
 			System.out.println("The file name is too long");
 			return;
 		}
-		long fileSize = 0;
 		try {
 			fileSize = Files.size(Paths.get(filePath));
 		}
@@ -79,7 +79,6 @@ public class Client {
 			out.write(byteFileName, 0, fileNameLength);
 			System.out.println("File name was sent");
 
-			long fileSize = Files.size(Paths.get(filePath));
 			out.writeLong(fileSize);
 
 			try (FileInputStream fileIn = new FileInputStream(filePath)) {
