@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.file.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -104,8 +105,7 @@ public class Server {
 			}
 
 			long workingTime = System.currentTimeMillis() - startTime;
-			if (TimeUnit.MILLISECONDS.toSeconds(workingTime) <= 3)
-				showClientInfo(clients.get(socket));
+			showClientInfo(clients.get(socket));
 
 			if (clients.get(socket).getTotalReceived() < fileSize)
 				out.writeBoolean(false);
@@ -123,11 +123,13 @@ public class Server {
 		}
 	}
 
-	private FileOutputStream makeFile(String fileName) throws IOException {
+	private FileOutputStream makeFile(String filePath) throws IOException {
 		File dir = new File("uploads");
 		if (!dir.exists())
 			dir.mkdirs();
 
+		Path pathOfPath = Paths.get(filePath);
+		String fileName = pathOfPath.getFileName().toString();
 		String partName = fileName;
 		String extension = "";
 		int dotIndex = fileName.lastIndexOf('.');
