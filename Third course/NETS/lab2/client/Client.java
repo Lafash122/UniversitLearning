@@ -28,11 +28,24 @@ public class Client {
 
 	Client (String path, String address, String port) {
 		filePath = path;
-		String[] pathElements = path.split("/");
-		fileName = pathElements[pathElements.length -1];
+		Path pathOfPath = Paths.get(filePath);
+		fileName = pathOfPath.getFileName().toString();
 		fileNameLength = fileName.getBytes(StandardCharsets.UTF_8).length;
 		if (fileNameLength > 4096) {
 			System.out.println("The file name is too long");
+			return;
+		}
+		long fileSize = 0;
+		try {
+			fileSize = Files.size(Paths.get(filePath));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot take file <" + fileName + "> size: " + e.getMessage());
+			return;
+		}
+		double fileSizeTB = fileSize / (1024.0 * 1024.0 * 1024.0 * 1024.0);
+		if (fileSizeTB > 1) {
+			System.out.println("The file size is too long");
 			return;
 		}
 
