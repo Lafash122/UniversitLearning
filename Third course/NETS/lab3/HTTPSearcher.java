@@ -40,10 +40,7 @@ public class HTTPSearcher {
 		return HttpRequest.newBuilder().GET().uri(URI.create(request)).header("User-Agent", MEDIAWIKI_HEADER).build();
 	}
 
-	public CompletableFuture<double[]> getLocation() {
-		System.out.println("Enter the location name:");
-		Scanner sc = new Scanner(System.in);
-		String placeName = sc.nextLine();
+	public CompletableFuture<double[]> getLocation(String placeName) {
 		String placeQuerryName = URLEncoder.encode(placeName, StandardCharsets.UTF_8);
 
 		HttpRequest request = makeHttpRequest(String.format("https://graphhopper.com/api/1/geocode?q=%s&locale=en&key=%s", placeQuerryName, GRAPHHOPPER_API_KEY));
@@ -70,6 +67,7 @@ public class HTTPSearcher {
 				}
 
 				System.out.println("Choose one location (enter the appropriate number from the list):");
+				Scanner sc = new Scanner(System.in);
 				int locationNumber = 0;
 				while (true) {
 					try {
@@ -181,5 +179,4 @@ public class HTTPSearcher {
 			return weather + "\n\n" + points;
 		});
 	}
-
 }
