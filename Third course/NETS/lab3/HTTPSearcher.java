@@ -40,7 +40,7 @@ public class HTTPSearcher {
 		return HttpRequest.newBuilder().GET().uri(URI.create(request)).header("User-Agent", MEDIAWIKI_HEADER).build();
 	}
 
-	public CompletableFuture<double[]> getLocation(String placeName) {
+	public CompletableFuture<String[]> getLocation(String placeName) {
 		String placeQuerryName = URLEncoder.encode(placeName, StandardCharsets.UTF_8);
 
 		HttpRequest request = makeHttpRequest(String.format("https://graphhopper.com/api/1/geocode?q=%s&locale=en&key=%s", placeQuerryName, GRAPHHOPPER_API_KEY));
@@ -53,6 +53,7 @@ public class HTTPSearcher {
 				if (jsonArrPlaces.length() == 0)
 					throw new RuntimeException("Cannot find places by request: " + placeName);
 
+				String[] points = new String[jsonArrPlaces.length()];
 				for (int i = 0; i < jsonArrPlaces.length(); i++) {
 					JSONObject jsonObjPlace = jsonArrPlaces.getJSONObject(i);
 					JSONObject jsonObjPoint = jsonObjPlace.getJSONObject("point");
@@ -64,31 +65,11 @@ public class HTTPSearcher {
 						jsonObjPoint.getDouble("lng"),
 						jsonObjPoint.getDouble("lat")
 					);
+
+					points[i] = jsonObjPoint.getDouble("lng") + " " + jsonObjPoint.getDouble("lat");
 				}
 
-				System.out.println("Choose one location (enter the appropriate number from the list):");
-				Scanner sc = new Scanner(System.in);
-				int locationNumber = 0;
-				while (true) {
-					try {
-						String inputTry = sc.nextLine();
-						locationNumber = Integer.parseInt(inputTry);
-						if ((locationNumber >= 1) && (locationNumber <= jsonArrPlaces.length()))
-							break;
-						else
-							System.out.println("Enter the APPROPRIATE number FROM 1 TO " + jsonArrPlaces.length() + ":");
-					}
-					catch (NumberFormatException e) {
-						System.out.println("Enter the appropriate NUMBER from 1 to " + jsonArrPlaces.length() + ":");
-					}
-				}
-
-				JSONObject jsonObjLocation = jsonArrPlaces.getJSONObject(locationNumber - 1);
-				double[] point = new double[2];
-				point[0] = jsonObjLocation.getJSONObject("point").getDouble("lng");
-				point[1] = jsonObjLocation.getJSONObject("point").getDouble("lat");
-
-				return point;
+				return points;
 			});
 	}
 
