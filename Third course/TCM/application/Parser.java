@@ -312,45 +312,64 @@ public class Parser {
 	}
 
 	private boolean parseBody() {
-		while (!tokens.get(tokenNum).type.equals("RBRACE")) {
-			if (tokens.get(tokenNum).type.equals("WS")) {
-				tokenNum++;
-				continue;
-			}
+		while ((tokenNum <= tokens.size())) {
+			if (skipWSToken("}"))
+				return true;
+			if ("RBRACE".equals(tokens.get(tokenNum).type))
+				return false;
 
 			boolean matchRes;
 
-			matchRes = matching("Имя переменной", new String[] { "NAME" }, "BODY_ERR:NAME_EXPECTED", new String[] { "ASSIGN", "SEMICOLON" });
-			if (matchRes)
-				return true;
+			matchRes = matching(
+				"Имя переменной",
+				new String[] { "NAME" },
+				"BODY_ERR:NAME_EXPECTED",
+				new String[] { "SEMICOLON", "RBRACE", "ASSIGN" }
+			);
+			if ("RBRACE".equals(recoveredType))
+				return false;
 			if ("SEMICOLON".equals(recoveredType)) {
 				tokenNum++;
 				continue;
 			}
 
-			matchRes = matching("=", new String[] { "ASSIGN" }, "BODY_ERR:ASSIGN_EXPECTED", new String[] { "NUMBER", "SEMICOLON" });
-			if (matchRes)
-				return true;
+			matchRes = matching(
+				"=",
+				new String[] { "ASSIGN" },
+				"BODY_ERR:ASSIGN_EXPECTED",
+				new String[] { "SEMICOLON", "RBRACE", "NUMBER" }
+			);
+			if ("RBRACE".equals(recoveredType))
+				return false;
 			if ("SEMICOLON".equals(recoveredType)) {
 				tokenNum++;
 				continue;
 			}
 
-			matchRes = matching("Число", new String[] { "NUMBER" }, "BODY_ERR:NUMBER_EXPECTED", new String[] { "SEMICOLON" });
-			if (matchRes)
-				return true;
+			matchRes = matching(
+				"Число",
+				new String[] { "NUMBER" },
+				"BODY_ERR:NUMBER_EXPECTED",
+				new String[] { "SEMICOLON", "RBRACE" }
+			);
+			if ("RBRACE".equals(recoveredType))
+				return false;
+			if ("SEMICOLON".equals(recoveredType)) {
+				tokenNum++;
+				continue;
+			}
 
 			matchRes = matching(
 				";",
 				new String[] { "SEMICOLON" },
 				"BODY_ERR:SEMICOLON_EXPECTED",
-				new String[] { "NAME", "RBRACE", "WS" }
+				new String[] { "RBRACE", "NAME" }
 			);
-			if (matchRes)
-				return true;
+			if ("RBRACE".equals(recoveredType))
+				return false;				
 		}
 
-		return false;
+		return true;
 	}
 
 	private boolean skipWSToken(String expected) {
