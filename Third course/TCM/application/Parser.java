@@ -343,16 +343,27 @@ public class Parser {
 
 			boolean matchRes;
 
+			if ("FOR".equals(tokens.get(tokenNum).type)) {
+				if (parseFor())
+					return true;
+				continue;
+			}
+
 			matchRes = matching(
 				"Имя переменной",
 				new String[] { "NAME" },
 				"BODY_ERR:NAME_EXPECTED",
-				new String[] { "SEMICOLON", "RBRACE", "ASSIGN" }
+				new String[] { "SEMICOLON", "RBRACE", "ASSIGN", "FOR" }
 			);
 			if ("RBRACE".equals(recoveredType))
 				return false;
 			if ("SEMICOLON".equals(recoveredType)) {
 				tokenNum++;
+				continue;
+			}
+			if ("FOR".equals(tokens.get(tokenNum).type)) {
+				if (parseFor())
+					return true;
 				continue;
 			}
 
@@ -360,7 +371,7 @@ public class Parser {
 				"=",
 				new String[] { "ASSIGN" },
 				"BODY_ERR:ASSIGN_EXPECTED",
-				new String[] { "SEMICOLON", "RBRACE", "NUMBER" }
+				new String[] { "SEMICOLON", "RBRACE", "NUMBER", "FOR" }
 			);
 			if ("RBRACE".equals(recoveredType))
 				return false;
@@ -368,17 +379,27 @@ public class Parser {
 				tokenNum++;
 				continue;
 			}
+			if ("FOR".equals(tokens.get(tokenNum).type)) {
+				if (parseFor())
+					return true;
+				continue;
+			}
 
 			matchRes = matching(
 				"Число",
 				new String[] { "NUMBER" },
 				"BODY_ERR:NUMBER_EXPECTED",
-				new String[] { "SEMICOLON", "RBRACE" }
+				new String[] { "SEMICOLON", "RBRACE", "FOR" }
 			);
 			if ("RBRACE".equals(recoveredType))
 				return false;
 			if ("SEMICOLON".equals(recoveredType)) {
 				tokenNum++;
+				continue;
+			}
+			if ("FOR".equals(tokens.get(tokenNum).type)) {
+				if (parseFor())
+					return true;
 				continue;
 			}
 
