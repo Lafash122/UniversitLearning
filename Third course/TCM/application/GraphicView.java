@@ -11,6 +11,8 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 
+import application.antlr.*;
+
 public class GraphicView extends JFrame {
 	private static final int DEFAULT_TEXT_SIZE = 18;
 
@@ -68,7 +70,7 @@ public class GraphicView extends JFrame {
 	private JButton undoEditButton;
 	private JButton redoEditButton;
 	private JButton startParceButton;
-	private JButton antlerButton;
+	private JButton antlrButton;
 	private JButton showInfoButton;
 	private JButton aboutButton;
 
@@ -291,7 +293,7 @@ public class GraphicView extends JFrame {
 		DefaultTableModel model = (DefaultTableModel) diagnosticsTable.getModel();
 		model.setRowCount(0);
 
-		Parser p = new Parser();
+		ForParser p = new ForParser();
 
 		ArrayList<Message> messages = p.parseCode(code);
 		for (Message msg : messages) {
@@ -602,8 +604,8 @@ public class GraphicView extends JFrame {
 			parsing();
 		});
 
-		antlerButton = createButton("antler.png", "Нажмите для запуска Антлера");
-		antlerButton.addActionListener(e -> {});
+		antlrButton = createButton("antler.png", "Нажмите для запуска Антлера");
+		antlrButton.addActionListener(e -> {});
 
 		showInfoButton = createButton("info.png", "Нажмите для вызова справки");
 		showInfoButton.addActionListener(e -> openWordDoc("Справка"));
@@ -619,7 +621,7 @@ public class GraphicView extends JFrame {
 		panel.add(undoEditButton);
 		panel.add(redoEditButton);
 		panel.add(startParceButton);
-		panel.add(antlerButton);
+		panel.add(antlrButton);
 		panel.add(showInfoButton);
 		panel.add(aboutButton);
 		panel.add(textSizeSlider);
