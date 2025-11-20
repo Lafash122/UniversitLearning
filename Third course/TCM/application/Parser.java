@@ -210,7 +210,6 @@ public class Parser {
 		innerParseRes = parseLoop();
 		if (innerParseRes)
 			return true;
-		System.out.println(recoveredType);
 		if ("FOR".equals(recoveredType))
 			return false;
 
@@ -407,7 +406,7 @@ public class Parser {
 				";",
 				new String[] { "SEMICOLON" },
 				"BODY_ERR:SEMICOLON_EXPECTED",
-				new String[] { "RBRACE", "NAME" }
+				new String[] { "RBRACE", "NAME", "FOR" }
 			);
 			if ("RBRACE".equals(recoveredType))
 				return false;				
