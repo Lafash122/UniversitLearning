@@ -1,5 +1,9 @@
 grammar ForGrammar;
 
+@header {
+package application.antlr;
+}
+
 forStmt : 'for' '(' init? ';' cond? ';' loop? ')' '{' body '}' ;
 
 init : NAME '=' NUMBER ;
