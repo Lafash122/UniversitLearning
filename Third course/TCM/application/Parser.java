@@ -167,53 +167,76 @@ public class Parser {
 		return messages;
 	}
 
-	private void parseFor() {
+	private boolean parseFor() {
 		boolean matchRes;
 		boolean innerParseRes;
 
-		matchRes = matching("for", new String[] { "FOR" }, "FOR_ERR:FOR_EXPECTED", new String[] { "LPAR" });
+		matchRes = matching("for", new String[] { "FOR" }, "FOR_ERR:FOR_EXPECTED", new String[] { "LPAR", "FOR" });
 		if (matchRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
-		matchRes = matching("(", new String[] { "LPAR" }, "FOR_ERR:LPAR_EXPECTED", new String[] { "NAME" });
+		matchRes = matching("(", new String[] { "LPAR" }, "FOR_ERR:LPAR_EXPECTED", new String[] { "NAME", "FOR" });
 		if (matchRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
 		innerParseRes = parseInit();
 		if (innerParseRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
-		matchRes = matching(";", new String[] { "SEMICOLON" }, "FOR_ERR:SEMICOLON_EXPECTED", new String[] { "NAME" });
+		matchRes = matching(";", new String[] { "SEMICOLON" }, "FOR_ERR:SEMICOLON_EXPECTED", new String[] { "NAME", "FOR" });
 		if (matchRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
 		innerParseRes = parseCond();
 		if (innerParseRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
-		matchRes = matching(";", new String[] { "SEMICOLON" }, "FOR_ERR:SEMICOLON_EXPECTED", new String[] { "NAME" });
+		matchRes = matching(";", new String[] { "SEMICOLON" }, "FOR_ERR:SEMICOLON_EXPECTED", new String[] { "NAME", "FOR" });
 		if (matchRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
 		innerParseRes = parseLoop();
 		if (innerParseRes)
-			return;
+			return true;
+		System.out.println(recoveredType);
+		if ("FOR".equals(recoveredType))
+			return false;
 
-		matchRes = matching(")", new String[] { "RPAR" }, "FOR_ERR:RPAR_EXPECTED", new String[] { "LBRACE" });
+		matchRes = matching(")", new String[] { "RPAR" }, "FOR_ERR:RPAR_EXPECTED", new String[] { "LBRACE", "FOR" });
 		if (matchRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
-		matchRes = matching("{", new String[] { "LBRACE" }, "FOR_ERR:LBRACE_EXPECTED", new String[] { "RBRACE" });
+		matchRes = matching("{", new String[] { "LBRACE" }, "FOR_ERR:LBRACE_EXPECTED", new String[] { "RBRACE", "FOR" });
 		if (matchRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
 		innerParseRes = parseBody();
 		if (innerParseRes)
-			return;
+			return true;
+		if ("FOR".equals(recoveredType))
+			return false;
 
 		matchRes = matching("}", new String[] { "RBRACE" }, "FOR_ERR:RBRACE_EXPECTED", new String[] { "WS" , "FOR" });
 		if (matchRes)
-			return;
+			return true;
+
+		return false;
 	}
 
 	private boolean parseInit() {
@@ -224,19 +247,19 @@ public class Parser {
 
 		boolean matchRes;
 
-		matchRes = matching("Имя переменной", new String[] { "NAME" }, "INIT_ERR:NAME_EXPECTED", new String[] { "ASSIGN", "SEMICOLON" });
+		matchRes = matching("Имя переменной", new String[] { "NAME" }, "INIT_ERR:NAME_EXPECTED", new String[] { "ASSIGN", "SEMICOLON", "FOR" });
 		if (matchRes)
 			return true;
-		if ("SEMICOLON".equals(recoveredType))
+		if ("SEMICOLON".equals(recoveredType) || "FOR".equals(recoveredType))
 			return false;
 
-		matchRes = matching("=", new String[] { "ASSIGN" }, "INIT_ERR:ASSIGN_EXPECTED", new String[] { "NUMBER", "SEMICOLON" });
+		matchRes = matching("=", new String[] { "ASSIGN" }, "INIT_ERR:ASSIGN_EXPECTED", new String[] { "NUMBER", "SEMICOLON", "FOR" });
 		if (matchRes)
 			return true;
-		if ("SEMICOLON".equals(recoveredType))
+		if ("SEMICOLON".equals(recoveredType) || "FOR".equals(recoveredType))
 			return false;
 
-		matchRes = matching("Число", new String[] { "NUMBER" }, "INIT_ERR:NUMBER_EXPECTED", new String[] { "SEMICOLON" });
+		matchRes = matching("Число", new String[] { "NUMBER" }, "INIT_ERR:NUMBER_EXPECTED", new String[] { "SEMICOLON", "FOR" });
 		if (matchRes)
 			return true;
 
@@ -255,25 +278,25 @@ public class Parser {
 			"Имя переменной",
 			new String[] { "NAME" },
 			"COND_ERR:NAME_EXPECTED",
-			new String[] { "EQ", "NE", "LE", "GE", "LT", "GT", "SEMICOLON" }
+			new String[] { "EQ", "NE", "LE", "GE", "LT", "GT", "SEMICOLON", "FOR" }
 		);
 		if (matchRes)
 			return true;
-		if ("SEMICOLON".equals(recoveredType))
+		if ("SEMICOLON".equals(recoveredType) || "FOR".equals(recoveredType))
 			return false;
 
 		matchRes = matching(
 			"Оператор сравнения",
 			new String[] { "EQ", "NE", "LE", "GE", "LT", "GT" },
 			"COND_ERR:COM_OP_EXPECTED",
-			new String[] { "NUMBER", "SEMICOLON" }
+			new String[] { "NUMBER", "SEMICOLON", "FOR" }
 		);
 		if (matchRes)
 			return true;
-		if ("SEMICOLON".equals(recoveredType))
+		if ("SEMICOLON".equals(recoveredType) || "FOR".equals(recoveredType))
 			return false;
 
-		matchRes = matching("Число", new String[] { "NUMBER" }, "COND_ERR:NUMBER_EXPECTED", new String[] { "SEMICOLON" });
+		matchRes = matching("Число", new String[] { "NUMBER" }, "COND_ERR:NUMBER_EXPECTED", new String[] { "SEMICOLON", "FOR" });
 		if (matchRes)
 			return true;
 
@@ -292,18 +315,18 @@ public class Parser {
 			"Имя переменной",
 			new String[] { "NAME" },
 			"LOOP_ERR:NAME_EXPECTED",
-			new String[] { "INCREMENT", "DECREMENT", "RPAR" }
+			new String[] { "INCREMENT", "DECREMENT", "RPAR", "FOR" }
 		);
 		if (matchRes)
 			return true;
-		if ("RPAR".equals(recoveredType))
+		if ("RPAR".equals(recoveredType) || "FOR".equals(recoveredType))
 			return false;
 
 		matchRes = matching(
 			"Оператор счетчика",
 			new String[] { "INCREMENT", "DECREMENT" },
 			"COND_ERR:COM_OP_EXPECTED",
-			new String[] { "RPAR" }
+			new String[] { "RPAR", "FOR" }
 		);
 		if (matchRes)
 			return true;
@@ -312,7 +335,7 @@ public class Parser {
 	}
 
 	private boolean parseBody() {
-		while ((tokenNum <= tokens.size())) {
+		while ((tokenNum < tokens.size())) {
 			if (skipWSToken("}"))
 				return true;
 			if ("RBRACE".equals(tokens.get(tokenNum).type))
