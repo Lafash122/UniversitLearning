@@ -3,7 +3,7 @@ package application;
 import java.util.*;
 import java.util.regex.*;
 
-public class Parser {
+public class ForParser {
 	public static class Token {
 		public final String token;
 		public final String type;
