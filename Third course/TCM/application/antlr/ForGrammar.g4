@@ -4,6 +4,8 @@ grammar ForGrammar;
 package application.antlr;
 }
 
+program : forStmt* EOF ;
+
 forStmt : 'for' '(' init? ';' cond? ';' loop? ')' '{' body '}' ;
 
 init : NAME '=' NUMBER ;
@@ -26,4 +28,4 @@ NUMBER : '-'? DIGIT+ ;
 fragment LETTER : [a-zA-Z_] ;
 fragment DIGIT : [0-9] ;
 
-WS : (' ' |'\n' |'\r' )+ -> skip ;
+WS : (' ' |'\n' |'\r' |'\t' )+ -> skip ;

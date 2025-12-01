@@ -7,9 +7,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
-
 import java.io.*;
 import java.util.*;
+
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
 
 import application.antlr.*;
 
@@ -296,6 +298,47 @@ public class GraphicView extends JFrame {
 		ForParser p = new ForParser();
 
 		ArrayList<Message> messages = p.parseCode(code);
+		for (Message msg : messages) {
+			table.addRow(new Object[] {
+				msg.lineNumber(),
+				msg.colNumber(),
+				msg.errorLine(),
+				msg.errorType()
+			});
+		}
+
+		if (messages.isEmpty())
+			return;
+
+		if (messages.get(0).messageType() == 0)
+			diagnosticsTable.setForeground(hasErrorColor);
+		else
+			diagnosticsTable.setForeground(noErrorColor);
+	}
+
+	private void antlrCheck() {
+		String code = originalText.getText();
+		CharStream input = CharStreams.fromString(code);
+
+		DefaultTableModel model = (DefaultTableModel) diagnosticsTable.getModel();
+		model.setRowCount(0);
+
+		ForGrammarLexer lexer = new ForGrammarLexer(input);
+
+		CustomErrorListener errorListener = new CustomErrorListener();
+
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(errorListener);
+
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		ForGrammarParser parser = new ForGrammarParser(tokens);
+
+		parser.removeErrorListeners();
+		parser.addErrorListener(errorListener);
+
+		parser.program();
+
+		ArrayList<Message> messages = errorListener.getMessages();
 		for (Message msg : messages) {
 			table.addRow(new Object[] {
 				msg.lineNumber(),
@@ -605,7 +648,9 @@ public class GraphicView extends JFrame {
 		});
 
 		antlrButton = createButton("antler.png", "Нажмите для запуска Антлера");
-		antlrButton.addActionListener(e -> {});
+		antlrButton.addActionListener(e -> {
+			antlrCheck();
+		});
 
 		showInfoButton = createButton("info.png", "Нажмите для вызова справки");
 		showInfoButton.addActionListener(e -> openWordDoc("Справка"));
