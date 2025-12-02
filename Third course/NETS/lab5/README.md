@@ -10,7 +10,7 @@
   - At the start of the program, a new UDP socket is created, which is added to the read selector;
   - When a domain name needs to be resolved, an A-record DNS query is sent through this socket to the address of the recursive DNS resolver;
   - The socket reader handles the case when a response to a DNS query is received, and then work continues with the received address;
-  - The dnsjava library is used to obtain the address of a recursive resolver, as well as to generate and parse DNS messages in Java;
+  - The `dnsjava` library is used to obtain the address of a recursive resolver, as well as to generate and parse DNS messages in Java;
 
 ## Running
 To compile:
