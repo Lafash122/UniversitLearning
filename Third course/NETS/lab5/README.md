@@ -15,5 +15,6 @@
 ## Running
 To compile:
 `javac -cp .;dnsjava-3.6.3.jar;slf4j-api-2.0.12.jar Main.java`
+
 To run:
 `java -cp .;dnsjava-3.6.3.jar;slf4j-api-2.0.12.jar Main <port>`
