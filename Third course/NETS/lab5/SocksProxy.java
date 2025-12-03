@@ -33,8 +33,8 @@ public class SocksProxy {
 		String targetHost;
 		int targetPort;
 
-		//volatile boolean endRemoteChannel = false;
-		//volatile boolean endClientChannel = false;
+		volatile boolean endRemoteChannel = false;
+		volatile boolean endClientChannel = false;
 
 		Session (SocketChannel client) {
 			this.client = client;
@@ -73,6 +73,7 @@ public class SocksProxy {
 	}
 
 	private static final long DNS_TIMEOUT = 8_000_000_000L;
+	private static final long SELECTOR_TIMEOUT = 1_000;
 	private int port = 5252;
 	private final Selector selector;
 	private final ServerSocketChannel serverChannel;
@@ -120,7 +121,7 @@ public class SocksProxy {
 			for (Integer id : toRemove)
 				dnsQuerries.remove(id);
 
-			int readyChannelsNumber = selector.select();
+			int readyChannelsNumber = selector.select(SELECTOR_TIMEOUT);
 			if (readyChannelsNumber == 0)
 				continue;
 
@@ -289,7 +290,7 @@ public class SocksProxy {
 				if ((session.clientKey != null) && session.clientKey.isValid() && !session.isClosed())
 					session.clientKey.interestOps(session.clientKey.interestOps() & ~SelectionKey.OP_READ);
 
-				//session.endClientChannel = true;
+				session.endClientChannel = true;
 				closeOnEnd(session);
 			
 				return;
@@ -438,7 +439,7 @@ public class SocksProxy {
 			if ((session.remoteKey != null) && session.remoteKey.isValid() && !session.isClosed())
 				session.remoteKey.interestOps(session.remoteKey.interestOps() & ~SelectionKey.OP_READ);
 
-			//session.endRemoteChannel = true;
+			session.endRemoteChannel = true;
 			closeOnEnd(session);
 
 			return;
@@ -492,6 +493,9 @@ public class SocksProxy {
 		buff.flip();
 		if (buff.hasRemaining())
 			session.client.write(buff);
+		if (!buff.hasRemaining())
+			if ((session.clientKey != null) && session.clientKey.isValid())
+				session.clientKey.interestOps(session.clientKey.interestOps() & ~SelectionKey.OP_WRITE);
 
 		buff.compact();
 		if ((session.remoteKey != null) && session.remoteKey.isValid())
@@ -505,6 +509,9 @@ public class SocksProxy {
 		buff.flip();
 		if (buff.hasRemaining())
 			session.remote.write(buff);
+		if (!buff.hasRemaining())
+			if ((session.remoteKey != null) && session.remoteKey.isValid())
+				session.remoteKey.interestOps(session.remoteKey.interestOps() & ~SelectionKey.OP_WRITE);
 
 		buff.compact();
 		if ((session.clientKey != null) && session.clientKey.isValid())
@@ -514,13 +521,9 @@ public class SocksProxy {
 	}
 
 	private void closeOnEnd(Session session) throws IOException {
-		boolean isClientOpen = (session.client != null) && session.client.isOpen();
-		boolean isRemoteOpen = (session.remote != null) && session.remote.isOpen();
 		boolean isBuffersEmpty = (session.clientToRemoteBuff.position() == 0) && (session.remoteToClientBuff.position() == 0);
-		boolean check = (!isClientOpen || !session.client.isConnected()) && (!isRemoteOpen || !session.remote.isConnected()) && isBuffersEmpty;
-		//System.out.println(check);
 
-		if ((!isClientOpen || !session.client.isConnected()) && (!isRemoteOpen || !session.remote.isConnected()) && isBuffersEmpty)
+		if (session.endClientChannel && session.endRemoteChannel && isBuffersEmpty)
 			session.close();
 	}
 
