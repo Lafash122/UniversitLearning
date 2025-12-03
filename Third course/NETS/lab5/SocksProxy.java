@@ -33,6 +33,9 @@ public class SocksProxy {
 		String targetHost;
 		int targetPort;
 
+		//volatile boolean endRemoteChannel = false;
+		//volatile boolean endClientChannel = false;
+
 		Session (SocketChannel client) {
 			this.client = client;
 		}
@@ -209,6 +212,9 @@ public class SocksProxy {
 			org.xbill.DNS.Record r = org.xbill.DNS.Record.newRecord(resolvingName, Type.A, DClass.IN);
 			Message msg = Message.newQuery(r);
 
+			if (dnsQuerries.size() >= 65536)
+				throw new IOException("DNS Queries map is already full");
+
 			int querryId = ThreadLocalRandom.current().nextInt(1, 65536);
 			while (dnsQuerries.containsKey(querryId))
 				querryId = ThreadLocalRandom.current().nextInt(1, 65536);
@@ -282,6 +288,8 @@ public class SocksProxy {
 
 				if ((session.clientKey != null) && session.clientKey.isValid() && !session.isClosed())
 					session.clientKey.interestOps(session.clientKey.interestOps() & ~SelectionKey.OP_READ);
+
+				//session.endClientChannel = true;
 				closeOnEnd(session);
 			
 				return;
@@ -429,6 +437,8 @@ public class SocksProxy {
 
 			if ((session.remoteKey != null) && session.remoteKey.isValid() && !session.isClosed())
 				session.remoteKey.interestOps(session.remoteKey.interestOps() & ~SelectionKey.OP_READ);
+
+			//session.endRemoteChannel = true;
 			closeOnEnd(session);
 
 			return;
@@ -507,6 +517,8 @@ public class SocksProxy {
 		boolean isClientOpen = (session.client != null) && session.client.isOpen();
 		boolean isRemoteOpen = (session.remote != null) && session.remote.isOpen();
 		boolean isBuffersEmpty = (session.clientToRemoteBuff.position() == 0) && (session.remoteToClientBuff.position() == 0);
+		boolean check = (!isClientOpen || !session.client.isConnected()) && (!isRemoteOpen || !session.remote.isConnected()) && isBuffersEmpty;
+		//System.out.println(check);
 
 		if ((!isClientOpen || !session.client.isConnected()) && (!isRemoteOpen || !session.remote.isConnected()) && isBuffersEmpty)
 			session.close();
