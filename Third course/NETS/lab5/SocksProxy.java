@@ -142,10 +142,10 @@ public class SocksProxy {
 						else
 							handleRead(key);
 
-					if (key.isWritable())
+					if (key.isValid() && key.isWritable())
 						handleWrite(key);
 
-					if (key.isConnectable())
+					if (key.isValid() && key.isConnectable())
 						handleRemoteConnect(key);
 				}
 				catch (IOException io) {
@@ -231,7 +231,7 @@ public class SocksProxy {
 
 	private void handleRead(SelectionKey key) throws IOException {
 		Session session = (Session) key.attachment();
-		if ((session == null) || session.isClosed())
+		if ((session == null) || session.isClosed() || !key.isValid())
 			return;
 
 		if (key.channel() == session.client)
@@ -280,7 +280,7 @@ public class SocksProxy {
 						session.remote.shutdownOutput();
 				} catch (IOException io) {}
 
-				if ((session.clientKey != null) && session.clientKey.isValid())
+				if ((session.clientKey != null) && session.clientKey.isValid() && !session.isClosed())
 					session.clientKey.interestOps(session.clientKey.interestOps() & ~SelectionKey.OP_READ);
 				closeOnEnd(session);
 			
@@ -290,7 +290,7 @@ public class SocksProxy {
 				return;
 
 			if (dest.position() > 0)
-				if ((session.remoteKey != null) && session.remoteKey.isValid())
+				if ((session.remoteKey != null) && session.remoteKey.isValid() && !session.isClosed())
 					session.remoteKey.interestOps(session.remoteKey.interestOps() | SelectionKey.OP_WRITE);
 
 			if (dest.position() == dest.capacity())
@@ -312,7 +312,7 @@ public class SocksProxy {
 			return false;
 		}
 		boolean isAuth = false;
-		//System.out.print(version + " " + methodsNumber + " ");
+
 		for (int i = 0; i < (methodsNumber & 0xFF); i++) {
 			byte method = buff.get();
 			if (method == 0x00)
@@ -427,7 +427,7 @@ public class SocksProxy {
 					session.client.shutdownOutput();
 			} catch (IOException io) {}
 
-			if ((session.remoteKey != null) && session.remoteKey.isValid())
+			if ((session.remoteKey != null) && session.remoteKey.isValid() && !session.isClosed())
 				session.remoteKey.interestOps(session.remoteKey.interestOps() & ~SelectionKey.OP_READ);
 			closeOnEnd(session);
 
@@ -437,7 +437,7 @@ public class SocksProxy {
 			return;
 
 		if (dest.position() > 0)
-			if ((session.clientKey != null) && session.clientKey.isValid())
+			if ((session.clientKey != null) && session.clientKey.isValid() && !session.isClosed())
 				session.clientKey.interestOps(session.clientKey.interestOps() | SelectionKey.OP_WRITE);
 
 		if (dest.position() == dest.capacity())
@@ -448,7 +448,7 @@ public class SocksProxy {
 
 	private void handleRemoteConnect(SelectionKey key) throws IOException {
 		Session session = (Session) key.attachment();
-		if ((session == null) || (session.remote == null))
+		if ((session == null) || (session.remote == null) || !key.isValid() || session.isClosed())
 			return;
 
 		SocketChannel channel = (SocketChannel) key.channel();
@@ -468,7 +468,7 @@ public class SocksProxy {
 
 	private void handleWrite(SelectionKey key) throws IOException {
 		Session session = (Session) key.attachment();
-		if ((session == null) || session.isClosed())
+		if ((session == null) || session.isClosed() || !key.isValid() || session.isClosed())
 			return;
 
 		if (key.channel() == session.client)
@@ -514,13 +514,7 @@ public class SocksProxy {
 
 	private void sendAuthMethod(Session session, byte method) throws IOException {
 		ByteBuffer out = ByteBuffer.wrap(new byte[] { (byte) 0x05, method });
-		session.client.write(out);
-		if(out.hasRemaining()) {
-			out.flip();
-			session.remoteToClientBuff.put(out);
-			if ((session.clientKey != null) && (session.clientKey.isValid()))
-				session.clientKey.interestOps(session.clientKey.interestOps() | SelectionKey.OP_WRITE);
-		}
+		toClient(session, out);
 	}
 
 	private void sendErrorToClient(Session session, byte errorCode) throws IOException {
@@ -533,13 +527,7 @@ public class SocksProxy {
 		error.putShort((short) 0);
 		error.flip();
 
-		session.client.write(error);
-		if (error.hasRemaining()) {
-			error.flip();
-			session.remoteToClientBuff.put(error);
-			if ((session.clientKey != null) && (session.clientKey.isValid()))
-				session.clientKey.interestOps(session.clientKey.interestOps() | SelectionKey.OP_WRITE);
-		}
+		toClient(session, error);
 	}
 
 	private void sendResponseToClient(Session session, InetAddress address, int fromPort) throws IOException {
@@ -552,11 +540,15 @@ public class SocksProxy {
 		response.putShort((short) fromPort);
 		response.flip();
 
-		session.client.write(response);
-		if (response.hasRemaining()) {
-			response.flip();
-			session.remoteToClientBuff.put(response);
-			if ((session.clientKey != null) && (session.clientKey.isValid()))
+		toClient(session, response);
+	}
+
+	private void toClient(Session session, ByteBuffer data) throws IOException {
+		session.client.write(data);
+		if (data.hasRemaining()) {
+			data.flip();
+			session.remoteToClientBuff.put(data);
+			if ((session.clientKey != null) && session.clientKey.isValid())
 				session.clientKey.interestOps(session.clientKey.interestOps() | SelectionKey.OP_WRITE);
 		}
 	}
