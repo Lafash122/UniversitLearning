@@ -49,6 +49,7 @@ public class Discoverer {
 			socket.bind(new InetSocketAddress(port));
 			socket.setNetworkInterface(multicastInterface);
 			socket.joinGroup(new InetSocketAddress(multicastAddress, port), multicastInterface);
+			socket.setTimeToLive(16);
 		}
 		catch (Exception e) {
 			System.out.println("Socket error: " + e.getMessage());
@@ -191,3 +192,4 @@ public class Discoverer {
 		return isChanged;
 	}
 }
+
